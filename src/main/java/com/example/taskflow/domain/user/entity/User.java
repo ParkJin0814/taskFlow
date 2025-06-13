@@ -1,6 +1,7 @@
 package com.example.taskflow.domain.user.entity;
 
 import com.example.taskflow.domain.common.entity.BaseEntity;
+import com.example.taskflow.domain.task.enums.TaskStatus;
 import com.example.taskflow.domain.user.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,4 +29,11 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @PrePersist
+    public void prePersist() {
+        if (role == null) {
+            role = UserRole.USER;
+        }
+    }
 }
