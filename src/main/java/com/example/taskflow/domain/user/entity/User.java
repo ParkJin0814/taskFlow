@@ -1,4 +1,31 @@
 package com.example.taskflow.domain.user.entity;
 
-public class User {
+import com.example.taskflow.domain.common.entity.BaseEntity;
+import com.example.taskflow.domain.user.enums.UserRole;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "users") // 테이블명은 "users"
+public class User extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String userName;
+
+    private String email;
+
+    private String password;
+
+    private String name;
+
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 }
