@@ -5,16 +5,21 @@ import com.example.taskflow.domain.common.dto.ApiResponse;
 import com.example.taskflow.domain.user.dto.request.LoginRequest;
 import com.example.taskflow.domain.user.dto.request.RegisterRequest;
 import com.example.taskflow.domain.user.dto.response.LoginResponse;
+import com.example.taskflow.domain.user.dto.response.MyProfileResponse;
 import com.example.taskflow.domain.user.dto.response.RegisterResponse;
 import com.example.taskflow.domain.user.entity.User;
 import com.example.taskflow.domain.user.exception.AuthException;
 import com.example.taskflow.domain.user.exception.InvalidRequestException;
 import com.example.taskflow.domain.user.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 
 @Service
@@ -25,6 +30,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final HttpServletRequest request;
 
     @Transactional
     public ApiResponse register(RegisterRequest registerRequest) {
@@ -47,7 +53,6 @@ public class UserService {
                 );
 
         User savedUser = userRepository.save(newUser);
-        String bearerToken = jwtUtil.generateToken(savedUser.getId(), savedUser.getUsername(), savedUser.getEmail(), savedUser.getRole());
 
         return ApiResponse.ok("회원가입이 완료되었습니다.", new RegisterResponse(
                 savedUser.getId(),
@@ -55,8 +60,7 @@ public class UserService {
                 savedUser.getEmail(),
                 savedUser.getName(),
                 savedUser.getRole(),
-                savedUser.getCreatedAt(),
-                bearerToken
+                savedUser.getCreatedAt()
         ));
     }
 
@@ -73,7 +77,37 @@ public class UserService {
 
         String bearerToken = jwtUtil.generateToken(user.getId(), user.getUsername(), user.getEmail(), user.getRole());
 
-
         return ApiResponse.ok("로그인이 완료되었습니다.", new LoginResponse(bearerToken));
+    }
+
+    @Transactional
+    public ApiResponse myProfile(UserDetails userDetails) {
+
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new InvalidRequestException("가입되지 않은 유저입니다."));
+
+        return ApiResponse.ok("사용자 정보를 조회했습니다.", new MyProfileResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getName(),
+                user.getRole(),
+                user.getCreatedAt()
+        ));
+    }
+
+    @Transactional
+    public ApiResponse deletion(UserDetails userDetails, String password) {
+
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new InvalidRequestException("가입되지 않은 유저입니다."));
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new InvalidRequestException("패스워드가 일치하지 않습니다.");
+        }
+
+        user.softDelete(LocalDateTime.now());
+        return ApiResponse.ok("회원 탈퇴가 완료되었습니다.", "");
+
     }
 }
