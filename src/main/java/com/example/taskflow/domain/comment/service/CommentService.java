@@ -4,16 +4,20 @@ import com.example.taskflow.domain.comment.dto.CommentRequestDto;
 import com.example.taskflow.domain.comment.dto.CommentResponseDto;
 import com.example.taskflow.domain.comment.entity.Comment;
 import com.example.taskflow.domain.comment.repository.CommentRepository;
+import com.example.taskflow.domain.common.dto.ApiResponse;
 import com.example.taskflow.domain.task.entity.Task;
 import com.example.taskflow.domain.task.repository.TaskRepository;
 import com.example.taskflow.domain.user.entity.User;
 import com.example.taskflow.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.example.taskflow.domain.comment.dto.CommentResponseDto.toDto;
 
 @Service
 @RequiredArgsConstructor
@@ -53,8 +57,8 @@ public class CommentService {
 
         List<Comment> commentList = commentRepository.findByTaskIdAndIsDeletedFalseOrderByCreatedAtDesc(task);
         return commentList.stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());  //스트림 내 결과 모아서 리스트responsedto로
+                .map(CommentResponseDto::toDto)
+                .collect(Collectors.toList());
     }
 
 
@@ -64,11 +68,13 @@ public class CommentService {
 
     // 댓글 수정
     @Transactional
-    public void updateComment(Long commentId, CommentRequestDto requestDto) {
+    public Comment updateComment(Long commentId, CommentRequestDto requestDto) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 Comment가 존재하지 않습니다."));
 
         comment.setContent(requestDto.getContent());
+
+        return comment;
     }
 
 
@@ -80,22 +86,6 @@ public class CommentService {
 
         comment.softDelete();
     }
-
-
-    // 공통 DTO 변환 메서드
-    private CommentResponseDto toDto(Comment comment) {
-        return CommentResponseDto.builder()
-                .id(comment.getId())
-                .content(comment.getContent())
-                .author(comment.getAuthor().getName())  // 작성자 이름 출력
-                .taskId(comment.getTaskId().getId())      // task의 id 출력
-                .createdAt(comment.getCreatedAt())
-                .updatedAt(comment.getUpdatedAt())
-                .build();
-    }
-
-
-
 
 
 }
