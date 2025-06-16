@@ -1,5 +1,6 @@
 package com.example.taskflow.domain.task.entity;
 
+import com.example.taskflow.domain.common.converter.TaskPriorityConverter;
 import com.example.taskflow.domain.common.entity.BaseEntity;
 import com.example.taskflow.domain.task.enums.TaskPriority;
 import com.example.taskflow.domain.task.enums.TaskStatus;
@@ -38,9 +39,9 @@ public class Task extends BaseEntity {
     private String description;
 
     /** 업무 중요도 (필수) - ENUM(String으로 저장) */
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = TaskPriorityConverter.class)
     private TaskPriority priority;
+
 
     /** 업무 담당자 (필수) - User와 다대일 관계 */
     @ManyToOne(fetch = FetchType.LAZY)
@@ -61,7 +62,7 @@ public class Task extends BaseEntity {
     /** 업무 상태 (필수) - TODO / IN_PROGRESS / DONE 등 ENUM */
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TaskStatus status = TaskStatus.TODO;
+    private TaskStatus status;
 
     /** 삭제 여부 (soft delete) */
     private Boolean isDeleted;

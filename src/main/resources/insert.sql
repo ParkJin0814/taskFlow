@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `tasks` (
                         `id`	BIGINT	NOT NULL AUTO_INCREMENT PRIMARY KEY	COMMENT '태스크 고유 식별자',
                         `title`	VARCHAR(200)	NOT NULL	COMMENT '태스크의 이름',
                         `description`	TEXT	NOT NULL	COMMENT ' 태스크에 대한 상세 설명',
-                        `priority`  ENUM('LOW', 'MEDIUM', 'HIGH') NULL COMMENT '우선순위',
+                        `priority` BIGINT NULL COMMENT '우선순위',
                         `status` ENUM('TODO', 'IN_PROGRESS', 'DONE') NOT NULL DEFAULT 'TODO' COMMENT '상태',
                         `assigned_user_id`	BIGINT	NOT NULL	COMMENT ' 태스크를 담당하는 사용자 id',
                         `created_user_id`	BIGINT	NOT NULL	COMMENT '태스크를 생성한 사용자 id',
