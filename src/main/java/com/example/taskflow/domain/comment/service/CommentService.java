@@ -51,7 +51,7 @@ public class CommentService {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 Task가 존재하지 않습니다."));
 
-        List<Comment> commentList = commentRepository.findByTaskAndIsDeletedFalseOrderByCreatedAtDesc(task);
+        List<Comment> commentList = commentRepository.findByTaskIdAndIsDeletedFalseOrderByCreatedAtDesc(task);
         return commentList.stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());  //스트림 내 결과 모아서 리스트responsedto로

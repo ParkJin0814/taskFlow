@@ -14,19 +14,22 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    Long authorId = 1L;
+    Long taskId = 2L;
+
     // 댓글 생성
-    @PostMapping("tasks/{taskId}/comment")
+    @PostMapping("/tasks/{taskId}/comment")
     public CommentResponseDto createComment(
             @PathVariable Long taskId,
             @RequestBody CommentRequestDto requestDto
     ) {
 
-        Long authorId = 1L;  // 임시
         return commentService.createComment(taskId, authorId, requestDto);
+
     }
 
     // 특정 태스크의 댓글 조회
-    @GetMapping("tasks/{taskId}/comment")
+    @GetMapping("/tasks/{taskId}/comment")
     public List<CommentResponseDto> getCommentsByTask(@PathVariable Long taskId) {
         return commentService.getCommentsByTask(taskId);
     }
