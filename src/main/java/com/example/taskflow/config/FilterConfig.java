@@ -1,24 +1,24 @@
 package com.example.taskflow.config;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@RequiredArgsConstructor
 public class FilterConfig {
 
-    private final JwtUtil jwtUtil;
+    @Bean
+    public JwtFilter jwtFilter(JwtUtil jwtUtil) {
+        return new JwtFilter(jwtUtil);
+    }
 
     @Bean
-    public FilterRegistrationBean<JwtFilter> jwtFilter() {
+    public FilterRegistrationBean<JwtFilter> jwtFilterRegistration(JwtFilter jwtFilter) {
         FilterRegistrationBean<JwtFilter> registrationBean = new FilterRegistrationBean<>();
-
-        registrationBean.setFilter(new JwtFilter(jwtUtil));
+        registrationBean.setFilter(jwtFilter);
         registrationBean.setOrder(1);
-        registrationBean.addUrlPatterns("/*"); // 필터를 적용할 URL 패턴을 지정합니다.
-
+        registrationBean.addUrlPatterns("/*");
         return registrationBean;
     }
 }
+

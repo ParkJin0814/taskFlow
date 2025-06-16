@@ -9,11 +9,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
 
-@Slf4j
+@Slf4j(topic = "JwtFilter")
 @RequiredArgsConstructor
 public class JwtFilter implements Filter {
 
@@ -36,7 +37,7 @@ public class JwtFilter implements Filter {
         // 고급 개발자
 
         // 처음 로그인 하는 거야? 그럼 JWT 토큰이 없을 것이니 토큰 먼저 발급 받아!
-        if(requestURI.equals("/api/login")) {
+        if(requestURI.equals("/registration") || requestURI.equals("/login")) {
             chain.doFilter(request,response);
             return;
         }
