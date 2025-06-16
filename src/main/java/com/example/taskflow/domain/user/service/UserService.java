@@ -7,10 +7,12 @@ import com.example.taskflow.domain.user.entity.User;
 import com.example.taskflow.domain.user.exception.InvalidRequestException;
 import com.example.taskflow.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class UserService {
 
@@ -39,7 +41,7 @@ public class UserService {
 
         User savedUser = userRepository.save(newUser);
 
-        String bearerToken = jwtUtil.generateToken(savedUser.getId(), savedUser.getUserName(), savedUser.getEmail(), savedUser.getRole());
+        String bearerToken = jwtUtil.generateToken(savedUser.getId(), savedUser.getUsername(), savedUser.getEmail(), savedUser.getRole());
 
         return new RegisterResponse(bearerToken);
     }
