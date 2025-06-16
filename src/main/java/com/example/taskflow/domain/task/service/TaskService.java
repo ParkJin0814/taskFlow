@@ -102,6 +102,10 @@ public class TaskService {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("태스크가 없습니다."));
 
+        if (task.getIsDeleted()) {
+            throw new RuntimeException("이미 삭제된 태스크입니다.");
+        }
+
         task.deleteTask(now);
     }
 
