@@ -11,7 +11,7 @@ import java.util.List;
  * @param <T> 페이지에 담길 개별 요소 타입
  */
 public record PagedResponse<T> (
-        List<T> content,       // 현재 페이지에 포함된 데이터 리스트
+        List<T> contents,       // 현재 페이지에 포함된 데이터 리스트
         int page,              // 현재 페이지 번호 (0부터 시작)
         int size,              // 페이지당 항목 수
         int totalPages,        // 전체 페이지 수
