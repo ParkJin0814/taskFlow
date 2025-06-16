@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "users") // 테이블명은 "users"
 public class User extends BaseEntity {
 
@@ -19,8 +18,10 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String userName;
 
+    @Column(nullable = false, unique = true)
     private String email;
 
     private String password;
@@ -35,5 +36,12 @@ public class User extends BaseEntity {
         if (role == null) {
             role = UserRole.USER;
         }
+    }
+
+    public User (String userName, String email, String password, String name) {
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+        this.name = name;
     }
 }
