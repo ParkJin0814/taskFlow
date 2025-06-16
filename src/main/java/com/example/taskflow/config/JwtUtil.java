@@ -96,7 +96,7 @@ public class JwtUtil {
      * @return 역할 정보 (문자열)
      */
     public String extractRoles(String token) {
-        return extractAllClaims(token).get("auth", String.class);
+        return extractAllClaims(token).get("role", String.class);
     }
 
     /**
