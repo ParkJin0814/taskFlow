@@ -21,5 +21,5 @@ public abstract class BaseEntity {
     @LastModifiedDate
     @Column
     @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime modifiedAt;
+    private LocalDateTime updatedAt;
 }
