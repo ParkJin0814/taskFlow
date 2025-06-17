@@ -54,7 +54,7 @@ public class TaskController {
      * @param status   필터링할 태스크 상태 (null일 경우 전체)
      * @return 페이징된 태스크 목록
      */
-    @GetMapping("/page")
+    @GetMapping("")
     public ResponseEntity<ApiResponse<PagedResponse<TaskResponseDto>>> getTasks(
             @PageableDefault(
                     size = 10,
