@@ -60,18 +60,26 @@ public class TaskService {
      * 특정 상태가 주어지면 해당 상태의 Task만 조회합니다.
      *
      * @param pageable 페이징 정보
-     * @param status   조회할 Task 상태 (null 허용)
+     * @param search   조회할 Task 상태 (null 허용)
      * @return Task 목록의 Page 객체 (DTO 형태)
      */
-    public Page<TaskResponseDto> searchTasks(Pageable pageable, TaskStatus status) {
-        if (status == null) {
-            return taskRepository.findAllByIsDeletedIsFalse(pageable)
+    public Page<TaskResponseDto> searchTasks(Pageable pageable, TaskStatus status, String search, Long assignedId) {
+
+        Page<Task> findTask = taskRepository.findAllByIsDeletedIsFalse(pageable);
+
+        if (status == null){
+            return findTask
                     .map(TaskResponseDto::toDto);
-        } else {
-            return taskRepository.findAllByStatusAndIsDeletedFalse(status, pageable)
+        }
+        else {
+            return taskRepository.findAllByStatus(status,pageable)
                     .map(TaskResponseDto::toDto);
         }
     }
+
+    //[task1,task2,task3]
+
+    //[taskResponse,taskResponse2,taskResponse3]
 
     /**
      * 특정 Task를 수정합니다.

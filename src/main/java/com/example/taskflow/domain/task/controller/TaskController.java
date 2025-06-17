@@ -53,7 +53,7 @@ public class TaskController {
      * 상태에 따라 페이징된 태스크 목록을 조회합니다.
      *
      * @param pageable 페이징 정보 (page, size, sort 등)
-     * @param status   필터링할 태스크 상태 (null일 경우 전체)
+     * @param search   검색 할 단어
      * @return 페이징된 태스크 목록
      */
     @GetMapping("")
@@ -62,9 +62,11 @@ public class TaskController {
                     size = 10,
                     sort = "createdAt",
                     direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(required = false) TaskStatus status
+            @RequestParam(required = false) TaskStatus status,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) Long assignedId
     ) {
-        Page<TaskResponseDto> taskResponseDtoList = taskService.searchTasks(pageable, status);
+        Page<TaskResponseDto> taskResponseDtoList = taskService.searchTasks(pageable, status,search, assignedId);
         PagedResponse<TaskResponseDto> pagedResponse = PagedResponse.from(taskResponseDtoList);
         return ResponseEntity.ok(ApiResponse.ok("태스크를 조회하였습니다.", pagedResponse));
     }

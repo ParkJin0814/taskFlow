@@ -16,11 +16,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class DashboardController {
     private final DashboardService dashboardService;
 
@@ -29,7 +31,7 @@ public class DashboardController {
         return ResponseEntity.ok(ApiResponse.ok("대시보드의 조회가 완료되었습니다." , dashboardService.dashboardMain()));
     }
 
-    @GetMapping("/dashboard/rate")
+    @GetMapping("/dashboard/stats")
     public ResponseEntity<ApiResponse<DashboardRateResponse>> dashboardRate(@AuthenticationPrincipal CustomUserDetails userDetails) {
         Long userId = userDetails.getUserId();
 
@@ -41,7 +43,7 @@ public class DashboardController {
         return ResponseEntity.ok(ApiResponse.ok("기간이 지난 태스크 수의 조회가 완료되었습니다." , dashboardService.dashboardOver()));
     }
 
-    @GetMapping("/dashboard/mytask")
+    @GetMapping("/dashboard/my-tasks")
     public ResponseEntity<ApiResponse<PagedResponse<TaskResponseDto>>> dashboardMyTask(@RequestParam(defaultValue = "0") int page,
                                                                                        @RequestParam(defaultValue = "10") int size,
                                                                                        @RequestParam(required = false) TaskStatus taskStatus,

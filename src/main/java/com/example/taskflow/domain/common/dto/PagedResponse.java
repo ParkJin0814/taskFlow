@@ -12,12 +12,11 @@ import java.util.List;
  */
 public record PagedResponse<T> (
         List<T> contents,       // 현재 페이지에 포함된 데이터 리스트
-        int page,              // 현재 페이지 번호 (0부터 시작)
-        int size,              // 페이지당 항목 수
-        int totalPages,        // 전체 페이지 수
-        long totalElements,    // 전체 항목 수
-        boolean isFirst,       // 첫 페이지 여부
-        boolean isLast         // 마지막 페이지 여부
+        long totalElements,     // 전체 항목 수
+        int totalPages,         // 전체 페이지 수
+        int size,               // 페이지 크기
+        int number              // 현재 페이지 번호 (0부터 시작)
+
 ) {
     /**
      * Spring Data의 Page 객체로부터 PagedResponse 객체를 생성합니다.
@@ -28,12 +27,11 @@ public record PagedResponse<T> (
     public static <T> PagedResponse<T> from(Page<T> page) {
         return new PagedResponse<>(
                 page.getContent(),      // 현재 페이지의 실제 데이터
-                page.getNumber(),       // 현재 페이지 번호
-                page.getSize(),         // 페이지 크기
-                page.getTotalPages(),   // 총 페이지 수
                 page.getTotalElements(),// 전체 요소 수
-                page.isFirst(),         // 첫 페이지 여부
-                page.isLast()           // 마지막 페이지 여부
+                page.getTotalPages(),   // 총 페이지 수
+                page.getSize(),         // 페이지 크기
+                page.getNumber()        // 현재 페이지 번호
+
         );
     }
 }

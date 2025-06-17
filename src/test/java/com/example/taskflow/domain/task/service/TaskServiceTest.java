@@ -118,7 +118,7 @@ class TaskServiceTest {
 
         assertThatThrownBy(() -> taskService.deleteTask(1L))
                 .isInstanceOf(RuntimeException.class)
-                .hasMessage("이미 삭제된 태스크입니다.");
+                .hasMessage("삭제 된 Task 입니다.");
     }
 
     @Test
@@ -139,7 +139,7 @@ class TaskServiceTest {
 
         assertThatThrownBy(() -> taskService.updateTaskStatus(dto, 1L))
                 .isInstanceOf(RuntimeException.class)
-                .hasMessageContaining("상태는 순차적으로만");
+                .hasMessageContaining("Task 상태는 이전 단계로 되돌릴 수 없습니다");
     }
 
     @Test
@@ -149,6 +149,6 @@ class TaskServiceTest {
 
         assertThatThrownBy(() -> taskService.updateTaskStatus(dto, 1L))
                 .isInstanceOf(RuntimeException.class)
-                .hasMessage("유효하지 않은 상태 변경입니다.");
+                .hasMessage("Task 상태 변경 흐름이 올바르지 않습니다.");
     }
 }
