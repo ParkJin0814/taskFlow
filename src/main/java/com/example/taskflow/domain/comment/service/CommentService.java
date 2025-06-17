@@ -4,14 +4,14 @@ import com.example.taskflow.domain.comment.dto.CommentRequestDto;
 import com.example.taskflow.domain.comment.dto.CommentResponseDto;
 import com.example.taskflow.domain.comment.entity.Comment;
 import com.example.taskflow.domain.comment.repository.CommentRepository;
-import com.example.taskflow.domain.common.dto.ApiResponse;
+import com.example.taskflow.domain.common.exception.BaseException;
+import com.example.taskflow.domain.common.exception.ErrorCode;
 import com.example.taskflow.domain.task.entity.Task;
 import com.example.taskflow.domain.task.repository.TaskRepository;
 import com.example.taskflow.domain.user.entity.User;
 import com.example.taskflow.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,11 +33,11 @@ public class CommentService {
 
         // taskId에 맞는 Task 가져오기
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 Task 없음"));
+                .orElseThrow(()-> new BaseException(ErrorCode.TASK_NOT_FOUND));
 
         // authorId에 맞는 User 가져오기
         User author = userRepository.findById(authorId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 User 없음"));
+                .orElseThrow(()-> new BaseException(ErrorCode.USER_NOT_FOUND));
 
         Comment comment = Comment.builder()
                 .content(requestDto.getContent())
@@ -53,7 +53,7 @@ public class CommentService {
     // 특정 task의 댓글 조회 (삭제 안된 것만 조회, 최신순)
     public List<CommentResponseDto> getCommentsByTask(Long taskId) {
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 Task가 존재하지 않습니다."));
+                .orElseThrow(()-> new BaseException(ErrorCode.TASK_NOT_FOUND));
 
         List<Comment> commentList = commentRepository.findByTaskIdAndIsDeletedFalseOrderByCreatedAtDesc(task);
         return commentList.stream()
@@ -76,7 +76,7 @@ public class CommentService {
     @Transactional
     public Comment updateComment(Long commentId, CommentRequestDto requestDto) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 Comment가 존재하지 않습니다."));
+                .orElseThrow(() -> new BaseException(ErrorCode.COMMENT_NOT_FOUND));
 
         comment.setContent(requestDto.getContent());
 
@@ -88,7 +88,7 @@ public class CommentService {
     @Transactional
     public void deleteComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 Comment가 존재하지 않습니다."));
+                .orElseThrow(() -> new BaseException(ErrorCode.COMMENT_NOT_FOUND));
 
         comment.softDelete();
     }

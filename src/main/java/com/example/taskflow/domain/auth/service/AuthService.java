@@ -5,9 +5,7 @@ import com.example.taskflow.domain.auth.dto.request.RegisterRequest;
 import com.example.taskflow.domain.auth.dto.response.LoginResponse;
 import com.example.taskflow.domain.auth.dto.response.RegisterResponse;
 import com.example.taskflow.domain.common.dto.ApiResponse;
-import com.example.taskflow.domain.common.exception.EmailAlreadyExistsException;
-import com.example.taskflow.domain.common.exception.InvalidCredentialsException;
-import com.example.taskflow.domain.common.exception.UsernameAlreadyExistsException;
+import com.example.taskflow.domain.common.exception.*;
 import com.example.taskflow.domain.user.entity.User;
 import com.example.taskflow.domain.user.repository.UserRepository;
 import com.example.taskflow.global.config.JwtUtil;
@@ -37,11 +35,11 @@ public class AuthService {
     public ApiResponse register(RegisterRequest registerRequest) {
 
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
-            throw new UsernameAlreadyExistsException();
+            throw new BaseException(ErrorCode.USERNAME_ALREADY_EXISTS);
         }
 
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
-            throw new EmailAlreadyExistsException();
+            throw new BaseException(ErrorCode.EMAIL_ALREADY_EXISTS);
         }
 
         String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
@@ -75,15 +73,15 @@ public class AuthService {
     public ApiResponse login(LoginRequest loginRequest) {
 
         User user = userRepository.findByUsername(loginRequest.getUsername())
-                .orElseThrow(InvalidCredentialsException::new);
+                .orElseThrow(()-> new BaseException(ErrorCode.USER_NOT_FOUND));
 
         if (user.isDeleted()) {
-            throw new InvalidCredentialsException();
+            throw new BaseException(ErrorCode.USER_DEACTIVATED);
         }
 
         // 로그인 시 이메일과 비밀번호가 일치하지 않을 경우 401을 반환합니다.
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            throw new InvalidCredentialsException();
+            throw new BaseException(ErrorCode.INVALID_PASSWORD);
         }
 
         //프론트에서 받을 때 "Bearer "를 제거하는 로직이 없음.

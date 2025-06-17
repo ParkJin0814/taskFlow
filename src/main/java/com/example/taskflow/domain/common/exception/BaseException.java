@@ -30,4 +30,15 @@ public class BaseException extends RuntimeException {
         this.status = status;
         this.message = message;
     }
+
+    /**
+     * ErrorCode 기반으로 예외를 생성합니다.
+     *
+     * @param errorCode  Enum 으로 정리한 에러 코드
+     */
+    public BaseException(ErrorCode errorCode) {
+        super(errorCode.getMessage()); // 부모 클래스 RuntimeException에 메시지를 전달
+        this.status = errorCode.getStatus();
+        this.message = errorCode.getMessage();
+    }
 }
