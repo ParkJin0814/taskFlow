@@ -2,6 +2,7 @@ package com.example.taskflow.domain.user.service;
 
 import com.example.taskflow.config.JwtUtil;
 import com.example.taskflow.domain.common.dto.ApiResponse;
+import com.example.taskflow.domain.common.exception.UsernameAlreadyExistsException;
 import com.example.taskflow.domain.user.dto.request.LoginRequest;
 import com.example.taskflow.domain.user.dto.request.RegisterRequest;
 import com.example.taskflow.domain.user.dto.response.LoginResponse;
@@ -30,13 +31,12 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
-    private final HttpServletRequest request;
 
     @Transactional
     public ApiResponse register(RegisterRequest registerRequest) {
 
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
-            throw new InvalidRequestException("이미 가입 된 아이디입니다.");
+            throw new InvalidRequestException("이미 가입 된 사용자명입니다.");
         }
 
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
@@ -68,7 +68,11 @@ public class UserService {
     public ApiResponse login(LoginRequest loginRequest) {
 
         User user = userRepository.findByUsername(loginRequest.getUsername())
-                .orElseThrow(() -> new InvalidRequestException("가입되지 않은 유저입니다."));
+                .orElseThrow(() -> new AuthException("가입되지 않은 유저입니다."));
+
+        if (user.isDeleted()) {
+            throw new InvalidRequestException("탈퇴된 계정은 불가합니다.");
+        }
 
         // 로그인 시 이메일과 비밀번호가 일치하지 않을 경우 401을 반환합니다.
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
@@ -84,7 +88,11 @@ public class UserService {
     public ApiResponse myProfile(UserDetails userDetails) {
 
         User user = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new InvalidRequestException("가입되지 않은 유저입니다."));
+                .orElseThrow(() -> new AuthException("가입되지 않은 유저입니다."));
+
+        if (user.isDeleted()) {
+            throw new InvalidRequestException("탈퇴된 계정은 불가합니다.");
+        }
 
         return ApiResponse.ok("사용자 정보를 조회했습니다.", new MyProfileResponse(
                 user.getId(),
@@ -100,14 +108,18 @@ public class UserService {
     public ApiResponse deletion(UserDetails userDetails, String password) {
 
         User user = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new InvalidRequestException("가입되지 않은 유저입니다."));
+                .orElseThrow(() -> new AuthException("가입되지 않은 유저입니다."));
+
+        if (user.isDeleted()) {
+            throw new InvalidRequestException("이미 탈퇴된 계정입니다.");
+        }
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new InvalidRequestException("패스워드가 일치하지 않습니다.");
         }
 
-        user.softDelete(LocalDateTime.now());
-        return ApiResponse.ok("회원 탈퇴가 완료되었습니다.", "");
+        user.softDelete();
+        return ApiResponse.ok("회원 탈퇴가 완료되었습니다.", null);
 
     }
 }

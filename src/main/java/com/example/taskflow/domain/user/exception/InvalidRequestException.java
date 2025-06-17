@@ -1,7 +1,10 @@
 package com.example.taskflow.domain.user.exception;
 
-public class InvalidRequestException extends RuntimeException{
+import com.example.taskflow.domain.common.exception.BaseException;
+import org.springframework.http.HttpStatus;
+
+public class InvalidRequestException extends BaseException {
     public InvalidRequestException(String message) {
-        super(message);
+        super(HttpStatus.BAD_REQUEST, message);
     }
 }
