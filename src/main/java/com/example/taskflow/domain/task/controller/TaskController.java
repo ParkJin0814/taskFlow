@@ -9,6 +9,7 @@ import com.example.taskflow.domain.task.dto.request.TaskUpdateRequestDto;
 import com.example.taskflow.domain.task.enums.TaskStatus;
 import com.example.taskflow.domain.task.service.TaskService;
 import com.example.taskflow.global.dto.CustomUserDetails;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -38,7 +39,7 @@ public class TaskController {
      */
     @PostMapping
     public ResponseEntity<ApiResponse<TaskResponseDto>> createTask(
-            @RequestBody TaskCreateRequestDto dto,
+            @Valid @RequestBody TaskCreateRequestDto dto,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ){
         Long userId = userDetails.getUserId();
@@ -76,7 +77,7 @@ public class TaskController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<TaskResponseDto>> updateTask(
             @PathVariable Long id,
-            @RequestBody TaskUpdateRequestDto updateDto,
+            @Valid @RequestBody TaskUpdateRequestDto updateDto,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ){
         Long userId = userDetails.getUserId();
@@ -109,7 +110,7 @@ public class TaskController {
      */
     @PatchMapping("/{id}")
     public ResponseEntity<ApiResponse<TaskResponseDto>> updateTaskStatus(
-            @RequestBody TaskStatusUpdateRequestDto requestDto,
+            @Valid @RequestBody TaskStatusUpdateRequestDto requestDto,
             @PathVariable Long id,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ){
