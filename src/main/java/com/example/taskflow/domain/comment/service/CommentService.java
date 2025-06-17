@@ -62,7 +62,13 @@ public class CommentService {
     }
 
 
-    // 댓글 내용 검색 (삭제 안된 것만, 키워드 검색?)
+    // 댓글 내용 검색 (삭제 안된 것만, 키워드 검색)
+    public List<CommentResponseDto> searchComments(String keyword) {
+        List<Comment> commentList = commentRepository.findByContentContainingAndIsDeletedFalse(keyword);
+        return commentList.stream()
+                .map(CommentResponseDto::toDto)
+                .collect(Collectors.toList());
+    }
 
 
 
