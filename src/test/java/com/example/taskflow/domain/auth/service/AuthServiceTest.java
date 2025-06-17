@@ -40,7 +40,7 @@ class AuthServiceTest {
 
     // register 공통 given
     RegisterRequest registerRequest = new RegisterRequest(
-            "테스트", "a@a.com", "password1!", "password1!", "테스트"
+            "테스트", "a@a.com", "password1!", "테스트"
     );
 
     @Test
