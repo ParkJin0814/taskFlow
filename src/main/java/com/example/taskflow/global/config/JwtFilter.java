@@ -26,6 +26,13 @@ public class JwtFilter implements Filter {
         //
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
+
+        // CORS preflight 요청은 무조건 통과
+        if (httpRequest.getMethod().equalsIgnoreCase("OPTIONS")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         String requestURI = httpRequest.getRequestURI();
         String username = null;
         String jwt = null;

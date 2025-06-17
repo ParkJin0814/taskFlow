@@ -86,7 +86,9 @@ public class AuthService {
             throw new InvalidCredentialsException();
         }
 
-        String bearerToken = jwtUtil.generateToken(user.getId(), user.getUsername(), user.getEmail(), user.getRole());
+        //프론트에서 받을 때 "Bearer "를 제거하는 로직이 없음.
+        //따라서 서버에서 줄 때 부터 붙일 필요가 없음.
+        String bearerToken = jwtUtil.generateToken(user.getId(), user.getUsername(), user.getEmail(), user.getRole()).substring(7);
 
         return ApiResponse.ok("로그인이 완료되었습니다.", new LoginResponse(bearerToken));
     }

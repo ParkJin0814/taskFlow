@@ -25,8 +25,8 @@ public class RegisterRequest {
     @Pattern(regexp = ".*[`~!@#$%^&*].*", message = "새 비밀번호는 특수문자를 포함해야 합니다.")
     private final String password;
 
-    @NotBlank(message = "비밀번호가 일치하지 않습니다.")
-    private final String passwordCheck;
+//    @NotBlank(message = "비밀번호가 일치하지 않습니다.")
+//    private final String passwordCheck;
 
     @NotBlank(message = "이름을 입력해주세요.")
     private final String name;
