@@ -4,14 +4,13 @@ import com.example.taskflow.domain.common.entity.BaseEntity;
 import com.example.taskflow.domain.task.entity.Task;
 import com.example.taskflow.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "comment")
@@ -21,6 +20,7 @@ public class Comment extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     @Column(nullable = false)
     private String content;
 
@@ -35,4 +35,10 @@ public class Comment extends BaseEntity {
     private boolean isDeleted;
 
     private LocalDateTime deletedAt;
+
+
+    public void softDelete() {
+        this.isDeleted = true;
+        this.deletedAt = LocalDateTime.now();
+    }
 }
