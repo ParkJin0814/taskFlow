@@ -41,8 +41,8 @@ public class CommentController {
         return ResponseEntity.ok(ApiResponse.ok("테스크의 댓글을 조회하였습니다.", responseList));
     }
 
-    // 댓글 검색 (내용에 대한 Like 검색, 키워드 검색)
-    @GetMapping("/api/comment/{commentId}")
+    // 댓글 검색 (특정 게시물의 댓글 중 Like 검색, 키워드 검색)
+    @GetMapping("/api/tasks/{taskId}/comment")
     public ResponseEntity<ApiResponse<List<CommentResponseDto>>> searchComments(@RequestParam String keyword) {
 
         List<CommentResponseDto> responseList = commentService.searchComments(keyword);
