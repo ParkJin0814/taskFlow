@@ -4,7 +4,7 @@ use taskFlow_db;
 
 CREATE TABLE IF NOT EXISTS `users` (
                          `id`	BIGINT	NOT NULL	AUTO_INCREMENT PRIMARY KEY	COMMENT '유저 고유 식별자',
-                         `user_name`	VARCHAR(100)	NOT NULL	COMMENT '로그인에 사용할 아이디',
+                         `username`	VARCHAR(100)	NOT NULL	COMMENT '로그인에 사용할 아이디',
                          `email`	VARCHAR(255)	NOT NULL UNIQUE COMMENT '이메일',
                          `password`	VARCHAR(255)	NOT NULL	COMMENT '비밀번호',
                          `name`	VARCHAR(100)	NOT NULL	    COMMENT '유저 본인 네임',

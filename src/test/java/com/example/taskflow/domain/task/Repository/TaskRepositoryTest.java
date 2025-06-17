@@ -35,7 +35,7 @@ public class TaskRepositoryTest {
         userRepository.save(user2);
 
         Task task = new Task(null, "제목", "내용", TaskPriority.LOW, user, user2,
-                LocalDate.now(), LocalDate.now().plusDays(7), TaskStatus.TODO, false, null);
+                LocalDate.now(), LocalDate.now().plusDays(7), TaskStatus.TODO);
 
         //when
         Task saved = taskRepository.save(task);
@@ -51,11 +51,11 @@ public class TaskRepositoryTest {
         userRepository.save(user);
 
         Task task1 = new Task(null, "t1", "내용1", TaskPriority.LOW, user, user,
-                LocalDate.now(), LocalDate.now(), TaskStatus.TODO, false, null);
+                LocalDate.now(), LocalDate.now().plusDays(7), TaskStatus.TODO);
         Task task2 = new Task(null, "t2", "내용2", TaskPriority.MEDIUM, user, user,
-                LocalDate.now(), LocalDate.now(), TaskStatus.TODO, false, null);
+                LocalDate.now(), LocalDate.now().plusDays(7), TaskStatus.TODO);
         Task task3 = new Task(null, "t3", "내용3", TaskPriority.HIGH, user, user,
-                LocalDate.now(), LocalDate.now(), TaskStatus.DONE, false, null);
+                LocalDate.now(), LocalDate.now().plusDays(7), TaskStatus.DONE);
 
         taskRepository.save(task1);
         taskRepository.save(task2);
@@ -75,9 +75,9 @@ public class TaskRepositoryTest {
         userRepository.save(user);
 
         taskRepository.save(new Task(null, "t1", "내용1", TaskPriority.LOW, user, user,
-                LocalDate.now(), LocalDate.now(), TaskStatus.TODO, false, null));
+                LocalDate.now(),LocalDate.now().plusDays(7), TaskStatus.TODO));
         taskRepository.save(new Task(null, "t2", "내용2", TaskPriority.LOW, user, user,
-                LocalDate.now(), LocalDate.now(), TaskStatus.DONE, true, null));
+                LocalDate.now(), LocalDate.now().plusDays(7), TaskStatus.DONE));
 
         // when
         List<Task> tasks = taskRepository.findAllByIsDeletedIsFalse(Pageable.ofSize(10)).getContent();
