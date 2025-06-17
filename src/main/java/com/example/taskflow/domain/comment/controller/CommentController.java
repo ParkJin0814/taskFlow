@@ -22,7 +22,7 @@ public class CommentController {
 
 
     // 댓글 생성
-    @PostMapping("/tasks/{taskId}/comment")
+    @PostMapping("/api/tasks/{taskId}/comment")
     public ResponseEntity<ApiResponse<CommentResponseDto>> createComment(
             @PathVariable Long taskId,
             @RequestBody @Valid CommentRequestDto requestDto) {
@@ -33,7 +33,7 @@ public class CommentController {
     }
 
     // 특정 태스크의 댓글 조회
-    @GetMapping("/tasks/{taskId}/comment")
+    @GetMapping("/api/tasks/{taskId}/comment")
     public ResponseEntity<ApiResponse<List<CommentResponseDto>>> getCommentsByTask(
             @PathVariable Long taskId) {
 
@@ -41,12 +41,16 @@ public class CommentController {
         return ResponseEntity.ok(ApiResponse.ok("테스크의 댓글을 조회하였습니다.", responseList));
     }
 
-    // 댓글 검색 (내용에 대한 Like 검색, 키워드 검색?)
+    // 댓글 검색 (내용에 대한 Like 검색, 키워드 검색)
+    @GetMapping("/api/comment/{commentId}")
+    public ResponseEntity<ApiResponse<List<CommentResponseDto>>> searchComments(@RequestParam String keyword) {
 
-
+        List<CommentResponseDto> responseList = commentService.searchComments(keyword);
+        return ResponseEntity.ok(ApiResponse.ok("키워드가 포함된 댓글이 검색되었습니다.", responseList));
+    }
 
     // 댓글 수정
-    @PutMapping("/comment/{commentId}")
+    @PutMapping("/api/comment/{commentId}")
     public ResponseEntity<ApiResponse<CommentResponseDto>> updateComment(
             @PathVariable Long commentId,
             @RequestBody @Valid CommentRequestDto requestDto) {
@@ -57,7 +61,7 @@ public class CommentController {
     }
 
     // 댓글 삭제 (Soft Delete)
-    @DeleteMapping("/comment/{commentId}")
+    @DeleteMapping("/api/comment/{commentId}")
     public ResponseEntity<ApiResponse<Void>> deleteComment(
             @PathVariable Long commentId) {
         commentService.deleteComment(commentId);
