@@ -33,11 +33,12 @@ public class TaskService {
      * @param dto Task 생성 요청 정보를 담은 DTO (제목, 설명, 중요도, 담당자 ID, 상태, 시작일, 마감일 포함)
      * @return 생성된 Task의 정보를 담은 DTO
      */
-    public TaskResponseDto createTask(TaskCreateRequestDto dto) {
+    public TaskResponseDto createTask(TaskCreateRequestDto dto,Long id) {
         User assignedUser = userRepository.findById(dto.assignedId())
                 .orElseThrow(()-> new BaseException(ErrorCode.USER_NOT_FOUND));
         User createdUser = userRepository.findById(1L)
                 .orElseThrow(()-> new BaseException(ErrorCode.USER_NOT_FOUND));
+
 
         Task task = Task.builder()
                 .title(dto.title())
@@ -104,11 +105,12 @@ public class TaskService {
         Task task = taskRepository.findById(id)
                 .orElseThrow(()-> new BaseException(ErrorCode.TASK_NOT_FOUND));
 
-        if (task.getIsDeleted()) {
+        if (task.isDeleted()) {
             throw new BaseException(ErrorCode.TASK_DEACTIVATED);
+
         }
 
-        task.deleteTask(now);
+        task.softDelete();
     }
 
     /**

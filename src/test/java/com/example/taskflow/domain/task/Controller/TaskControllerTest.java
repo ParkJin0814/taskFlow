@@ -48,7 +48,7 @@ class TaskControllerTest {
         TaskCreateRequestDto request = new TaskCreateRequestDto("제목", "설명", TaskPriority.LOW, 1L,LocalDate.now().plusDays(1), LocalDate.now(), TaskStatus.TODO);
         TaskResponseDto response = new TaskResponseDto(1L, "제목", "설명", TaskPriority.LOW, "담당자", "생성자", LocalDate.now(), LocalDate.now().plusDays(1), TaskStatus.IN_PROGRESS,LocalDateTime.now());
 
-        Mockito.when(taskService.createTask(any(TaskCreateRequestDto.class))).thenReturn(response);
+        Mockito.when(taskService.createTask(any(TaskCreateRequestDto.class),any(Long.class))).thenReturn(response);
 
         ResultActions result = mockMvc.perform(post("/api/tasks")
                 .contentType(MediaType.APPLICATION_JSON)
