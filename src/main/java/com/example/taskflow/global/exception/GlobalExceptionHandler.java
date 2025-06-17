@@ -29,6 +29,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BaseException.class)
     public ResponseEntity<ApiResponse<?>> handlePlannerException(BaseException e) {
         ApiResponse<?> response = ApiResponse.error(e.getMessage());
+        log.error("커스텀 예외처리 발생", e);
         return new ResponseEntity<>(response, e.getStatus());
     }
 
