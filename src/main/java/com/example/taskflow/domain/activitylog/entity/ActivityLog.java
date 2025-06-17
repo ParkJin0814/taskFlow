@@ -38,6 +38,16 @@ public class ActivityLog {
 
     private Integer taskId;
 
+    public ActivityLog(LocalDateTime now, User userId, String ipAddress, String requestMethod, String requestUrl, ActivityType activityType, int taskId) {
+        this.requestTime = now;
+        this.userId = userId;
+        this.ipAddress = ipAddress;
+        this.requestMethod = requestMethod;
+        this.requestUrl = requestUrl;
+        this.activityType = activityType;
+        this.taskId = taskId;
+    }
+
     @PrePersist
     public void onCreate() {
         if (requestTime == null) {

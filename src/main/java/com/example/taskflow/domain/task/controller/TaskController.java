@@ -1,5 +1,6 @@
 package com.example.taskflow.domain.task.controller;
 
+import com.example.taskflow.global.config.aop.Logging;
 import com.example.taskflow.domain.common.dto.ApiResponse;
 import com.example.taskflow.domain.common.dto.PagedResponse;
 import com.example.taskflow.domain.task.dto.request.TaskCreateRequestDto;
@@ -38,6 +39,7 @@ public class TaskController {
      * @return 생성된 태스크 정보를 담은 응답
      */
     @PostMapping
+    @Logging
     public ResponseEntity<ApiResponse<TaskResponseDto>> createTask(
             @Valid @RequestBody TaskCreateRequestDto dto,
             @AuthenticationPrincipal CustomUserDetails userDetails
@@ -75,6 +77,7 @@ public class TaskController {
      * @return 수정된 태스크 정보
      */
     @PutMapping("/{id}")
+    @Logging
     public ResponseEntity<ApiResponse<TaskResponseDto>> updateTask(
             @PathVariable Long id,
             @Valid @RequestBody TaskUpdateRequestDto updateDto,
@@ -92,6 +95,7 @@ public class TaskController {
      * @return 삭제 성공 응답
      */
     @DeleteMapping("/{id}")
+    @Logging
     public ResponseEntity<ApiResponse<Void>> deleteTask(
             @PathVariable Long id,
             @AuthenticationPrincipal CustomUserDetails userDetails
@@ -109,6 +113,7 @@ public class TaskController {
      * @return 상태가 변경된 태스크 정보
      */
     @PatchMapping("/{id}")
+    @Logging
     public ResponseEntity<ApiResponse<TaskResponseDto>> updateTaskStatus(
             @Valid @RequestBody TaskStatusUpdateRequestDto requestDto,
             @PathVariable Long id,
