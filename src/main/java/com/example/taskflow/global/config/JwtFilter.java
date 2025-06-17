@@ -1,6 +1,7 @@
 package com.example.taskflow.global.config;
 
 import com.example.taskflow.domain.user.enums.UserRole;
+import com.example.taskflow.global.dto.CustomUserDetails;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -67,13 +68,21 @@ public class JwtFilter implements Filter {
 
         // JWT 사용자의 이름을 확인 해보자
         username = jwtUtil.extractUsername(jwt);
+        Long userId = jwtUtil.extractUserId(jwt);
 
         // JWT 사용자 권한을 확인
         String auth = jwtUtil.extractRoles(jwt);
         UserRole userRole = UserRole.valueOf(auth);
-        User user = new User(username,"", List.of(userRole::getRole));
+        CustomUserDetails userDetails = new CustomUserDetails(
+                userId,
+                username,
+                "", // 비밀번호는 필요 없음
+                userRole
+        );
 
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities())
+        );
 
         chain.doFilter(request, response);
 

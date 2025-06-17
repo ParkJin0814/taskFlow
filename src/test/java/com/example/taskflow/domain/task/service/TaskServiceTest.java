@@ -56,17 +56,18 @@ class TaskServiceTest {
                 .status(TaskStatus.TODO)
                 .startLine(LocalDate.now())
                 .deadLine(LocalDate.now().plusDays(3))
-                .isDeleted(false)
                 .build();
     }
 
     @Test
     void 태스크_생성_테스트() {
         TaskCreateRequestDto dto = new TaskCreateRequestDto("title", "desc", TaskPriority.MEDIUM, 1L, LocalDate.now(), LocalDate.now().plusDays(3),TaskStatus.TODO);
+
+
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(taskRepository.save(any(Task.class))).thenReturn(task);
 
-        TaskResponseDto response = taskService.createTask(dto);
+        TaskResponseDto response = taskService.createTask(dto,1L);
 
         assertThat(response.getTitle()).isEqualTo("title");
     }
@@ -108,12 +109,12 @@ class TaskServiceTest {
 
         taskService.deleteTask(1L);
 
-        assertThat(task.getIsDeleted()).isTrue();
+        assertThat(task.isDeleted()).isTrue();
     }
 
     @Test
     void 태스크_삭제_이미삭제_예외처리() {
-        task.deleteTask(LocalDateTime.now());
+        task.softDelete();
         when(taskRepository.findById(1L)).thenReturn(Optional.of(task));
 
         assertThatThrownBy(() -> taskService.deleteTask(1L))
