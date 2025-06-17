@@ -64,12 +64,6 @@ public class Task extends BaseEntity {
     @Column(nullable = false)
     private TaskStatus status;
 
-    /** 삭제 여부 (soft delete) */
-    private Boolean isDeleted;
-
-    /** 삭제 시각 */
-    private LocalDateTime deletedAt;
-
     /**
      * 업무 수정 (중요도, 담당자, 마감일 변경)
      * @param priority 변경할 중요도
@@ -80,15 +74,6 @@ public class Task extends BaseEntity {
         this.priority = priority;
         this.assignedUser = assignedUser;
         this.deadLine = deadLine;
-    }
-
-    /**
-     * 업무 삭제 처리 (isDeleted 플래그 설정 및 삭제 시간 기록)
-     * @param deletedAt 삭제 시간
-     */
-    public void deleteTask(LocalDateTime deletedAt) {
-        this.isDeleted = true;
-        this.deletedAt = deletedAt;
     }
 
     /**
@@ -108,9 +93,6 @@ public class Task extends BaseEntity {
     public void prePersist() {
         if (status == null) {
             status = TaskStatus.TODO;
-        }
-        if (isDeleted == null) {
-            isDeleted = false;
         }
     }
 }

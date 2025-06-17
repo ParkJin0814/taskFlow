@@ -8,12 +8,13 @@ import com.example.taskflow.domain.task.dto.request.TaskStatusUpdateRequestDto;
 import com.example.taskflow.domain.task.dto.request.TaskUpdateRequestDto;
 import com.example.taskflow.domain.task.enums.TaskStatus;
 import com.example.taskflow.domain.task.service.TaskService;
+import com.example.taskflow.global.dto.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.data.domain.Pageable;
@@ -37,9 +38,11 @@ public class TaskController {
      */
     @PostMapping
     public ResponseEntity<ApiResponse<TaskResponseDto>> createTask(
-            @RequestBody TaskCreateRequestDto dto
+            @RequestBody TaskCreateRequestDto dto,
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ){
-        TaskResponseDto responseDto = taskService.createTask(dto);
+        Long userId = userDetails.getUserId();
+        TaskResponseDto responseDto = taskService.createTask(dto, userId);
         return ResponseEntity.ok(ApiResponse.ok("태스크가 생성되었습니다.", responseDto));
     }
 
@@ -73,8 +76,10 @@ public class TaskController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<TaskResponseDto>> updateTask(
             @PathVariable Long id,
-            @RequestBody TaskUpdateRequestDto updateDto
+            @RequestBody TaskUpdateRequestDto updateDto,
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ){
+        Long userId = userDetails.getUserId();
         TaskResponseDto responseDto = taskService.updateTask(id, updateDto);
         return ResponseEntity.ok(ApiResponse.ok("태스크를 수정하였습니다.", responseDto));
     }
@@ -87,8 +92,10 @@ public class TaskController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteTask(
-            @PathVariable Long id
+            @PathVariable Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ){
+        Long userId = userDetails.getUserId();
         taskService.deleteTask(id);
         return ResponseEntity.ok(ApiResponse.ok("태스크가 삭제되었습니다.", null));
     }
@@ -103,8 +110,10 @@ public class TaskController {
     @PatchMapping("/{id}")
     public ResponseEntity<ApiResponse<TaskResponseDto>> updateTaskStatus(
             @RequestBody TaskStatusUpdateRequestDto requestDto,
-            @PathVariable Long id
+            @PathVariable Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ){
+        Long userId = userDetails.getUserId();
         TaskResponseDto responseDto = taskService.updateTaskStatus(requestDto, id);
         return ResponseEntity.ok(ApiResponse.ok("태스크를 수정하였습니다.", responseDto));
     }

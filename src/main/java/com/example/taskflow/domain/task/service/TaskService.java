@@ -31,10 +31,10 @@ public class TaskService {
      * @param dto Task 생성 요청 정보를 담은 DTO (제목, 설명, 중요도, 담당자 ID, 상태, 시작일, 마감일 포함)
      * @return 생성된 Task의 정보를 담은 DTO
      */
-    public TaskResponseDto createTask(TaskCreateRequestDto dto) {
+    public TaskResponseDto createTask(TaskCreateRequestDto dto,Long id) {
         User assignedUser = userRepository.findById(dto.assignedId())
                 .orElseThrow(() -> new RuntimeException("사용자가 없습니다."));
-        User createdUser = userRepository.findById(1L)
+        User createdUser = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("사용자가 없습니다."));
 
         Task task = Task.builder()
@@ -102,11 +102,11 @@ public class TaskService {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("태스크가 없습니다."));
 
-        if (task.getIsDeleted()) {
+        if (task.isDeleted()) {
             throw new RuntimeException("이미 삭제된 태스크입니다.");
         }
 
-        task.deleteTask(now);
+        task.softDelete();
     }
 
     /**

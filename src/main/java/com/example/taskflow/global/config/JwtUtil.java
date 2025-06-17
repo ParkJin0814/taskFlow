@@ -99,6 +99,12 @@ public class JwtUtil {
         return extractAllClaims(token).get("role", String.class);
     }
 
+
+    public Long extractUserId(String token) {
+        return extractAllClaims(token).get("id", Long.class);
+    }
+
+
     /**
      * JWT 토큰에서 특정 역할이 포함되어 있는지 확인합니다.
      * @param token JWT 토큰
@@ -141,5 +147,7 @@ public class JwtUtil {
         }
         return false; // 예외가 발생한 경우 토큰이 유효하지 않음
     }
+
+
 
 }
