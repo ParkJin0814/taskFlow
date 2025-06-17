@@ -1,5 +1,7 @@
 package com.example.taskflow.domain.task.service;
 
+import com.example.taskflow.domain.common.exception.BaseException;
+import com.example.taskflow.domain.common.exception.ErrorCode;
 import com.example.taskflow.domain.task.dto.request.TaskCreateRequestDto;
 import com.example.taskflow.domain.task.dto.request.TaskStatusUpdateRequestDto;
 import com.example.taskflow.domain.task.dto.request.TaskUpdateRequestDto;
@@ -33,9 +35,9 @@ public class TaskService {
      */
     public TaskResponseDto createTask(TaskCreateRequestDto dto) {
         User assignedUser = userRepository.findById(dto.assignedId())
-                .orElseThrow(() -> new RuntimeException("사용자가 없습니다."));
+                .orElseThrow(()-> new BaseException(ErrorCode.USER_NOT_FOUND));
         User createdUser = userRepository.findById(1L)
-                .orElseThrow(() -> new RuntimeException("사용자가 없습니다."));
+                .orElseThrow(()-> new BaseException(ErrorCode.USER_NOT_FOUND));
 
         Task task = Task.builder()
                 .title(dto.title())
@@ -80,12 +82,12 @@ public class TaskService {
     @Transactional
     public TaskResponseDto updateTask(Long id, TaskUpdateRequestDto updateDto) {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("태스크가 없습니다."));
+                .orElseThrow(()-> new BaseException(ErrorCode.TASK_NOT_FOUND));
 
         Long assigneeId = updateDto.getAssignedUserId();
 
         User assignee = userRepository.findById(assigneeId)
-                .orElseThrow(() -> new RuntimeException("사용자가 없습니다."));
+                .orElseThrow(()-> new BaseException(ErrorCode.USER_NOT_FOUND));
 
         task.updateTask(updateDto.getPriority(), assignee, updateDto.getDeadLine());
         return toDto(task);
@@ -100,10 +102,10 @@ public class TaskService {
     public void deleteTask(Long id) {
         LocalDateTime now = LocalDateTime.now();
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("태스크가 없습니다."));
+                .orElseThrow(()-> new BaseException(ErrorCode.TASK_NOT_FOUND));
 
         if (task.getIsDeleted()) {
-            throw new RuntimeException("이미 삭제된 태스크입니다.");
+            throw new BaseException(ErrorCode.TASK_DEACTIVATED);
         }
 
         task.deleteTask(now);
@@ -120,13 +122,13 @@ public class TaskService {
     @Transactional
     public TaskResponseDto updateTaskStatus(TaskStatusUpdateRequestDto requestDto, Long id) {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("태스크가 없습니다."));
+                .orElseThrow(()-> new BaseException(ErrorCode.TASK_NOT_FOUND));
 
         TaskStatus currentStatus = task.getStatus();
         TaskStatus requestedStatus = requestDto.getStatus();
 
         if (requestedStatus.ordinal() <= currentStatus.ordinal()) {
-            throw new RuntimeException("상태는 순차적으로만 변경할 수 있으며, 이전 단계로 되돌릴 수 없습니다.");
+            throw new BaseException(ErrorCode.TASK_STATE_NOT_REVERSIBLE);
         }
 
         if ((currentStatus == TaskStatus.TODO && requestedStatus == TaskStatus.IN_PROGRESS) ||
@@ -134,7 +136,7 @@ public class TaskService {
             task.changeStatus(requestedStatus);
             return toDto(task);
         } else {
-            throw new RuntimeException("유효하지 않은 상태 변경입니다.");
+            throw new BaseException(ErrorCode.TASK_STATE_FLOW_ERROR);
         }
     }
 }
