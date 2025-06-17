@@ -37,7 +37,7 @@ public class JwtFilter implements Filter {
         // 고급 개발자
 
         // 처음 로그인 하는 거야? 그럼 JWT 토큰이 없을 것이니 토큰 먼저 발급 받아!
-        if(requestURI.equals("/registration") || requestURI.equals("/login")) {
+        if(requestURI.equals("/register") || requestURI.equals("/login")) {
             chain.doFilter(request,response);
             return;
         }

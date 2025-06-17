@@ -30,7 +30,7 @@ public class UserController {
      * @param registerRequest 회원 가입 작성 폼 (username, email, password, name)
      * @return 회원 가입 된 유저 정보
      */
-    @PostMapping("/registration")
+    @PostMapping("/register")
     public ResponseEntity register(@Valid @RequestBody RegisterRequest registerRequest) {
         return ResponseEntity.ok(userService.register(registerRequest));
     }
