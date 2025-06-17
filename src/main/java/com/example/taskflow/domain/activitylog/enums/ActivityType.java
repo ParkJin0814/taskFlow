@@ -5,14 +5,14 @@ import lombok.Getter;
 import java.util.Arrays;
 
 public enum ActivityType {
-    TASK_CREATED("POST/tasks",1),
-    TASK_UPDATED("PUT/tasks/{id}",1),
-    TASK_DELETED("DELETE/tasks/{id}",1),
-    TASK_STATUS_CHANGED("PATCH/tasks/{id}/status",1),
-    COMMENT_CREATED("POST/tasks/{taskId}/comment",2),
-    COMMENT_UPDATED("PUT/comment/{commentId}",2),
-    COMMENT_DELETED("DELETE/comment/{commentId}",2),
-    USER_LOGGED_IN("POST/login",3),
+    TASK_CREATED("POST/api/tasks",1),
+    TASK_UPDATED("PUT/api/tasks/{id}",1),
+    TASK_DELETED("DELETE/api/tasks/{id}",1),
+    TASK_STATUS_CHANGED("PATCH/api/tasks/{id}",1),
+    COMMENT_CREATED("POST/api/tasks/{taskId}/comment",2),
+    COMMENT_UPDATED("PUT/api/comment/{commentId}",2),
+    COMMENT_DELETED("DELETE/api/comment/{commentId}",2),
+    USER_LOGGED_IN("POST/api/auth/login",3),
     USER_LOGGED_OUT("POST/logout",3);
 
     private final String requestUrl;

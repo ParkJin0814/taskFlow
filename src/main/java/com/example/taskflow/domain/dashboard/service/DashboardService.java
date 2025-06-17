@@ -48,9 +48,9 @@ public class DashboardService {
     public Page<TaskResponseDto> dashboardMyTask(Long userId, TaskStatus taskStatus, Pageable pageable) {
         User user = userRepository.findById(userId).orElseThrow();
         if(taskStatus != null) {
-            return taskRepository.findByAssignedUserAndStatus(user, taskStatus, pageable).map(TaskResponseDto::toDto);
+            return taskRepository.findByAssignedUserAndStatusAndIsDeletedFalse(user, taskStatus, pageable).map(TaskResponseDto::toDto);
         }
-        return taskRepository.findByAssignedUser(user , pageable).map(TaskResponseDto::toDto);
+        return taskRepository.findByAssignedUserAndIsDeletedFalse(user , pageable).map(TaskResponseDto::toDto);
     }
 
     public DashboardOverResponse dashboardOver() {

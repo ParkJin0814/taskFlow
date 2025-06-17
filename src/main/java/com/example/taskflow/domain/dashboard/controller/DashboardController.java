@@ -8,11 +8,13 @@ import com.example.taskflow.domain.dashboard.dto.response.DashboardRateResponse;
 import com.example.taskflow.domain.dashboard.service.DashboardService;
 import com.example.taskflow.domain.task.dto.response.TaskResponseDto;
 import com.example.taskflow.domain.task.enums.TaskStatus;
+import com.example.taskflow.global.dto.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,8 +30,10 @@ public class DashboardController {
     }
 
     @GetMapping("/dashboard/rate")
-    public ResponseEntity<ApiResponse<DashboardRateResponse>> dashboardRate() {
-        return ResponseEntity.ok(ApiResponse.ok("태스크 통계 조회가 완료되었습니다.",dashboardService.dashboardRate(1L)));
+    public ResponseEntity<ApiResponse<DashboardRateResponse>> dashboardRate(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long userId = userDetails.getUserId();
+
+        return ResponseEntity.ok(ApiResponse.ok("태스크 통계 조회가 완료되었습니다.",dashboardService.dashboardRate(userId)));
     }
 
     @GetMapping("/dashboard/over")
@@ -40,9 +44,11 @@ public class DashboardController {
     @GetMapping("/dashboard/mytask")
     public ResponseEntity<ApiResponse<PagedResponse<TaskResponseDto>>> dashboardMyTask(@RequestParam(defaultValue = "0") int page,
                                                                                        @RequestParam(defaultValue = "10") int size,
-                                                                                       @RequestParam(required = false) TaskStatus taskStatus) {
+                                                                                       @RequestParam(required = false) TaskStatus taskStatus,
+                                                                                       @AuthenticationPrincipal CustomUserDetails userDetails) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC,"priority"));
+        Long userId = userDetails.getUserId();
 
-        return ResponseEntity.ok(ApiResponse.ok("내 태스크 조회가 완료되었습니다.",PagedResponse.from(dashboardService.dashboardMyTask(2L, taskStatus, pageable))));
+        return ResponseEntity.ok(ApiResponse.ok("내 태스크 조회가 완료되었습니다.",PagedResponse.from(dashboardService.dashboardMyTask(userId, taskStatus, pageable))));
     }
 }

@@ -1,5 +1,6 @@
 package com.example.taskflow.domain.comment.controller;
 
+import com.example.taskflow.global.config.aop.Logging;
 import com.example.taskflow.domain.comment.dto.CommentRequestDto;
 import com.example.taskflow.domain.comment.dto.CommentResponseDto;
 import com.example.taskflow.domain.comment.entity.Comment;
@@ -23,6 +24,7 @@ public class CommentController {
 
     // 댓글 생성
     @PostMapping("/api/tasks/{taskId}/comment")
+    @Logging
     public ResponseEntity<ApiResponse<CommentResponseDto>> createComment(
             @PathVariable Long taskId,
             @RequestBody @Valid CommentRequestDto requestDto) {
@@ -51,6 +53,7 @@ public class CommentController {
 
     // 댓글 수정
     @PutMapping("/api/comment/{commentId}")
+    @Logging
     public ResponseEntity<ApiResponse<CommentResponseDto>> updateComment(
             @PathVariable Long commentId,
             @RequestBody @Valid CommentRequestDto requestDto) {
@@ -62,6 +65,7 @@ public class CommentController {
 
     // 댓글 삭제 (Soft Delete)
     @DeleteMapping("/api/comment/{commentId}")
+    @Logging
     public ResponseEntity<ApiResponse<Void>> deleteComment(
             @PathVariable Long commentId) {
         commentService.deleteComment(commentId);
