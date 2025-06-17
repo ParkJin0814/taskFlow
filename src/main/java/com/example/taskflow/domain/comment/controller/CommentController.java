@@ -42,7 +42,7 @@ public class CommentController {
     }
 
     // 댓글 검색 (특정 게시물의 댓글 중 Like 검색, 키워드 검색)
-    @GetMapping("/api/tasks/{taskId}/comment")
+    @GetMapping("/api/tasks/{taskId}/comment/search")
     public ResponseEntity<ApiResponse<List<CommentResponseDto>>> searchComments(@RequestParam String keyword) {
 
         List<CommentResponseDto> responseList = commentService.searchComments(keyword);
