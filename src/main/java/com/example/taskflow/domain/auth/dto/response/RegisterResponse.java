@@ -1,4 +1,4 @@
-package com.example.taskflow.domain.user.dto.response;
+package com.example.taskflow.domain.auth.dto.response;
 
 import com.example.taskflow.domain.user.enums.UserRole;
 import lombok.Getter;

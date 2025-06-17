@@ -1,4 +1,4 @@
-package com.example.taskflow.domain.user.dto.response;
+package com.example.taskflow.domain.auth.dto.response;
 
 import lombok.Getter;
 

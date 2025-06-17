@@ -1,4 +1,4 @@
-package com.example.taskflow.domain.user.exception;
+package com.example.taskflow.domain.common.exception.custom;
 
 import com.example.taskflow.domain.common.exception.BaseException;
 import org.springframework.http.HttpStatus;

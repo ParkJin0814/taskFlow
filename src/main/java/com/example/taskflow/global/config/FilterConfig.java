@@ -1,4 +1,4 @@
-package com.example.taskflow.config;
+package com.example.taskflow.global.config;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;

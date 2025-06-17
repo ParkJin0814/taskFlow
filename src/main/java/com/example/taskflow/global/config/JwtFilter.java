@@ -1,4 +1,4 @@
-package com.example.taskflow.config;
+package com.example.taskflow.global.config;
 
 import com.example.taskflow.domain.user.enums.UserRole;
 import jakarta.servlet.*;
@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,14 +29,12 @@ public class JwtFilter implements Filter {
         String username = null;
         String jwt = null;
 
-
-
         String authorizationHeader = httpRequest.getHeader("Authorization");
 
         // 고급 개발자
 
         // 처음 로그인 하는 거야? 그럼 JWT 토큰이 없을 것이니 토큰 먼저 발급 받아!
-        if(requestURI.equals("/register") || requestURI.equals("/login")) {
+        if(requestURI.equals("/api/auth/register") || requestURI.equals("/api/auth/login")) {
             chain.doFilter(request,response);
             return;
         }

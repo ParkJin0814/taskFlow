@@ -1,4 +1,4 @@
-package com.example.taskflow.config;
+package com.example.taskflow.global.config;
 
 import com.example.taskflow.domain.user.enums.UserRole;
 import io.jsonwebtoken.Claims;
