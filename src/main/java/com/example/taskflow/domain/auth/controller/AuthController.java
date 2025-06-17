@@ -1,5 +1,6 @@
 package com.example.taskflow.domain.auth.controller;
 
+import com.example.taskflow.global.config.aop.Logging;
 import com.example.taskflow.domain.auth.dto.request.LoginRequest;
 import com.example.taskflow.domain.auth.dto.request.RegisterRequest;
 import com.example.taskflow.domain.auth.service.AuthService;
@@ -38,6 +39,7 @@ public class AuthController {
      * @return 로그인 된 유저 JWT토큰
      */
     @PostMapping("/login")
+    @Logging
     public ResponseEntity login(@Valid @RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(authService.login(loginRequest));
     }

@@ -1,7 +1,6 @@
 
 package com.example.taskflow.domain.task.Controller;
 
-import com.example.taskflow.domain.task.controller.TaskController;
 import com.example.taskflow.domain.task.dto.request.TaskCreateRequestDto;
 import com.example.taskflow.domain.task.dto.request.TaskStatusUpdateRequestDto;
 import com.example.taskflow.domain.task.dto.request.TaskUpdateRequestDto;
@@ -10,12 +9,10 @@ import com.example.taskflow.domain.task.enums.TaskPriority;
 import com.example.taskflow.domain.task.enums.TaskStatus;
 import com.example.taskflow.domain.task.service.TaskService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;

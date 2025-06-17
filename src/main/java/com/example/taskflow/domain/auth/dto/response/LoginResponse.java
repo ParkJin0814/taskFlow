@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public class LoginResponse {
 
-    private final String bearerToken;
+    private final String token;
 
     public LoginResponse(String bearerToken) {
-        this.bearerToken = bearerToken;
+        this.token = bearerToken;
     }
 
 }
