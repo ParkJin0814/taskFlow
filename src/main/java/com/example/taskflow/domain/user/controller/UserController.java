@@ -23,7 +23,7 @@ public class UserController {
      * @param userDetails 로그인 된 유저 JWT토큰의 정보 (username 등)
      * @return 로그인 된 유저 정보
      */
-    @GetMapping("/users/profile")
+    @GetMapping("/users/me")
     public ResponseEntity myProfile(@AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(userService.myProfile(userDetails));
     }
