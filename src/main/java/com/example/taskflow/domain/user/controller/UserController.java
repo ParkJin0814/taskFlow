@@ -24,21 +24,46 @@ public class UserController {
 
     private final UserService userService;
 
+    /**
+     * 회원 가입
+     *
+     * @param registerRequest 회원 가입 작성 폼 (username, email, password, name)
+     * @return 회원 가입 된 유저 정보
+     */
     @PostMapping("/registration")
     public ResponseEntity register(@Valid @RequestBody RegisterRequest registerRequest) {
         return ResponseEntity.ok(userService.register(registerRequest));
     }
 
+    /**
+     * 로그인
+     *
+     * @param loginRequest 로그인 작성 폼 (username, password)
+     * @return 로그인 된 유저 JWT토큰
+     */
     @PostMapping("/login")
     public ResponseEntity login(@Valid @RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(userService.login(loginRequest));
     }
 
+    /**
+     * 내 프로필
+     *
+     * @param userDetails 로그인 된 유저 JWT토큰의 정보 (username 등)
+     * @return 로그인 된 유저 정보
+     */
     @GetMapping("/users/profile")
     public ResponseEntity myProfile(@AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(userService.myProfile(userDetails));
     }
 
+    /**
+     * 회원 탈퇴
+     *
+     * @param userDetails 로그인 된 유저 JWT토큰의 정보 (username 등)
+     * @param deleteUserRequest 유저 입력 작성 폼 (password)
+     * @return 회원 탈퇴 완료 메시지
+     */
     @PostMapping("/users/deletion")
     public ResponseEntity deletion(@AuthenticationPrincipal UserDetails userDetails, @RequestBody DeleteUserRequest deleteUserRequest) {
         return ResponseEntity.ok(userService.deletion(userDetails, deleteUserRequest.getPassword()));

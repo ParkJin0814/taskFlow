@@ -32,6 +32,12 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
+    /**
+     * 회원가입
+     *
+     * @param registerRequest 회원가입 작성폼 (username, email, password, name)
+     * @return 회원가입 된 유저 정보
+     */
     @Transactional
     public ApiResponse register(RegisterRequest registerRequest) {
 
@@ -64,6 +70,12 @@ public class UserService {
         ));
     }
 
+    /**
+     * 로그인
+     *
+     * @param loginRequest 로그인 작성 폼 (username, password)
+     * @return 로그인 된 유저 JWT토큰
+     */
     @Transactional
     public ApiResponse login(LoginRequest loginRequest) {
 
@@ -84,6 +96,12 @@ public class UserService {
         return ApiResponse.ok("로그인이 완료되었습니다.", new LoginResponse(bearerToken));
     }
 
+    /**
+     * 내 프로필
+     *
+     * @param userDetails 로그인 된 유저 JWT토큰의 정보 (username 등)
+     * @return 로그인 된 유저 정보
+     */
     @Transactional
     public ApiResponse myProfile(UserDetails userDetails) {
 
@@ -104,6 +122,13 @@ public class UserService {
         ));
     }
 
+    /**
+     * 회원 탈퇴
+     *
+     * @param userDetails 로그인 된 유저 JWT토큰의 정보 (username 등)
+     * @param password 패스워드 확인
+     * @return 회원 탈퇴 완료 메시지
+     */
     @Transactional
     public ApiResponse deletion(UserDetails userDetails, String password) {
 
