@@ -45,10 +45,8 @@ public class TaskService {
                 .description(dto.description())
                 .priority(dto.priority())
                 .assignedUser(assignedUser)
-                .createdUser(createdUser)
                 .status(dto.status())
-                .startLine(dto.startLine())
-                .deadLine(dto.deadLine())
+                .dueDate(dto.dueDate())
                 .build();
 
         taskRepository.save(task);
@@ -72,7 +70,7 @@ public class TaskService {
                     .map(TaskResponseDto::toDto);
         }
         else {
-            return taskRepository.findAllByStatus(status,pageable)
+            return taskRepository.findAllByStatusAndDeletedIsFalse(status,pageable)
                     .map(TaskResponseDto::toDto);
         }
     }

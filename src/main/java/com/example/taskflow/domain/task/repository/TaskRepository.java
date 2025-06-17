@@ -36,10 +36,10 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     Long countByisDeletedFalse();
 
     @EntityGraph(attributePaths = {"assignedUser"})
-    Page<Task> findTasksByTitleContainingOrDescriptionContaining(String search,String search2, Pageable pageable);
+    Page<Task> findTasksByTitleContainingOrDescriptionContainingAndDeletedIsFalse(String searchTitle,String searchDescrip, Pageable pageable);
 
     @EntityGraph(attributePaths = {"assignedUser"})
-    Page<Task> findAllByStatus(TaskStatus status, Pageable pageable);
+    Page<Task> findAllByStatusAndDeletedIsFalse(TaskStatus status, Pageable pageable);
 
     @EntityGraph(attributePaths = {"assignedUser"})
     Page<Task> findAllByIsDeletedIsFalse(Pageable pageable);

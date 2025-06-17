@@ -13,8 +13,7 @@ import java.time.LocalDate;
  * @param description  업무 설명 (선택)
  * @param priority     업무 중요도 (필수) - LOW, MEDIUM, HIGH 등의 enum 값
  * @param assignedId   담당자 사용자 ID (선택이나 일반적으로 필수로 처리)
- * @param startLine    업무 시작일 (선택)
- * @param deadLine     업무 마감일 (선택)
+ * @param dueDate     업무 마감일 (선택)
  * @param status       업무 상태 (필수) - TODO, IN_PROGRESS, DONE 등의 enum 값
  */
 public record TaskCreateRequestDto(
@@ -22,8 +21,7 @@ public record TaskCreateRequestDto(
         String description,
         @NotNull TaskPriority priority,
         Long assignedId,
-        LocalDate startLine,
-        LocalDate deadLine,
+        LocalDate dueDate,
         @NotNull TaskStatus status
 ) {
 
