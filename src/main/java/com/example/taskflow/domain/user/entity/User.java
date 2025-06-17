@@ -3,15 +3,16 @@ package com.example.taskflow.domain.user.entity;
 import com.example.taskflow.domain.common.entity.BaseEntity;
 import com.example.taskflow.domain.user.enums.UserRole;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @Table(name = "users") // 테이블명은 "users"
+@Builder
 public class User extends BaseEntity {
 
     @Id
