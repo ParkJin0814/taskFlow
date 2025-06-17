@@ -28,8 +28,8 @@ public class TaskRepositoryTest {
     @Test
     void 태스크_저장_로직_테스트() {
         //given
-        User user = new User(null, "사용자1", "kmg02845@gmail.com", "12341234", "사용자1", UserRole.of("USER"));
-        User user2 = new User(null, "사용자2", "2222@gmail.com", "12341234", "사용자2", UserRole.of("USER"));
+        User user = new User(null, "사용자1", "kmg02845@gmail.com", "12341234", "사용자1", UserRole.valueOf("USER"));
+        User user2 = new User(null, "사용자2", "2222@gmail.com", "12341234", "사용자2", UserRole.valueOf("USER"));
 
         userRepository.save(user);
         userRepository.save(user2);
@@ -41,7 +41,7 @@ public class TaskRepositoryTest {
         Task saved = taskRepository.save(task);
 
         //then
-        Assertions.assertThat(saved.getAssignedUser().getUserName()).isEqualTo("사용자1");
+        Assertions.assertThat(saved.getAssignedUser().getUsername()).isEqualTo("사용자1");
     }
 
     @Test
@@ -74,10 +74,14 @@ public class TaskRepositoryTest {
         User user = new User(null, "user", "email", "pw", "nickname", UserRole.USER);
         userRepository.save(user);
 
+        Task deletedTask = new Task(null, "t2", "내용2", TaskPriority.LOW, user, user,
+                LocalDate.now(), LocalDate.now().plusDays(7), TaskStatus.DONE);
+
+        deletedTask.softDelete();
+
         taskRepository.save(new Task(null, "t1", "내용1", TaskPriority.LOW, user, user,
                 LocalDate.now(),LocalDate.now().plusDays(7), TaskStatus.TODO));
-        taskRepository.save(new Task(null, "t2", "내용2", TaskPriority.LOW, user, user,
-                LocalDate.now(), LocalDate.now().plusDays(7), TaskStatus.DONE));
+        taskRepository.save(deletedTask);
 
         // when
         List<Task> tasks = taskRepository.findAllByIsDeletedIsFalse(Pageable.ofSize(10)).getContent();
