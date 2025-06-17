@@ -1,14 +1,14 @@
 package com.example.taskflow.domain.user.service;
 
 import com.example.taskflow.domain.common.dto.ApiResponse;
+import com.example.taskflow.domain.common.exception.BaseException;
 import com.example.taskflow.domain.common.exception.InvalidCredentialsException;
 import com.example.taskflow.domain.user.dto.response.MyProfileResponse;
 import com.example.taskflow.domain.user.entity.User;
-import com.example.taskflow.domain.common.exception.custom.AuthException;
-import com.example.taskflow.domain.common.exception.custom.InvalidRequestException;
 import com.example.taskflow.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,7 @@ public class UserService {
                 .orElseThrow(InvalidCredentialsException::new);
 
         if (user.isDeleted()) {
-            throw new AuthException("탈퇴 된 회원입니다.");
+            throw new BaseException(HttpStatus.UNAUTHORIZED, "탈퇴 된 회원입니다.");
         }
 
         return ApiResponse.ok("사용자 정보를 조회했습니다.", new MyProfileResponse(
@@ -63,11 +63,11 @@ public class UserService {
                 .orElseThrow(InvalidCredentialsException::new);
 
         if (user.isDeleted()) {
-            throw new AuthException("이미 탈퇴 된 회원입니다.");
+            throw new BaseException(HttpStatus.UNAUTHORIZED, "탈퇴 된 회원입니다.");
         }
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new InvalidRequestException("패스워드가 일치하지 않습니다.");
+            throw new BaseException(HttpStatus.BAD_REQUEST, "패스워드가 일치하지 않습니다.");
         }
 
         user.softDelete();

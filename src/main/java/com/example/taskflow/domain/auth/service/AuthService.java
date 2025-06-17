@@ -5,9 +5,10 @@ import com.example.taskflow.domain.auth.dto.request.RegisterRequest;
 import com.example.taskflow.domain.auth.dto.response.LoginResponse;
 import com.example.taskflow.domain.auth.dto.response.RegisterResponse;
 import com.example.taskflow.domain.common.dto.ApiResponse;
+import com.example.taskflow.domain.common.exception.EmailAlreadyExistsException;
 import com.example.taskflow.domain.common.exception.InvalidCredentialsException;
+import com.example.taskflow.domain.common.exception.UsernameAlreadyExistsException;
 import com.example.taskflow.domain.user.entity.User;
-import com.example.taskflow.domain.common.exception.custom.InvalidRequestException;
 import com.example.taskflow.domain.user.repository.UserRepository;
 import com.example.taskflow.global.config.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -36,11 +37,11 @@ public class AuthService {
     public ApiResponse register(RegisterRequest registerRequest) {
 
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
-            throw new InvalidRequestException("이미 가입 된 사용자명입니다.");
+            throw new UsernameAlreadyExistsException();
         }
 
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
-            throw new InvalidRequestException("이미 가입 된 이메일입니다.");
+            throw new EmailAlreadyExistsException();
         }
 
         String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
