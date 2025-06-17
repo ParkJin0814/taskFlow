@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .addFilterBefore(jwtFilter, SecurityContextHolderAwareRequestFilter.class)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login").permitAll()
-                        .requestMatchers("/regiser").permitAll()
+                        .requestMatchers("/register").permitAll()
                         .requestMatchers("/admins/**").hasRole("ADMIN")
                         .requestMatchers("/users/**").hasRole("USER")
                         .anyRequest().authenticated()
