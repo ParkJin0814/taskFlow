@@ -5,6 +5,7 @@ import com.example.taskflow.domain.task.enums.TaskStatus;
 import com.example.taskflow.domain.user.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users") // 테이블명은 "users"
+@Builder
 public class User extends BaseEntity {
 
     @Id
