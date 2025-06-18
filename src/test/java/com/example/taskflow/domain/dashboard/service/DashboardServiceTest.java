@@ -1,6 +1,7 @@
 package com.example.taskflow.domain.dashboard.service;
 
 import com.example.taskflow.domain.dashboard.dto.response.DashboardMainResponse;
+import com.example.taskflow.domain.dashboard.dto.response.DashboardOverResponse;
 import com.example.taskflow.domain.dashboard.dto.response.DashboardRateResponse;
 import com.example.taskflow.domain.task.dto.response.TaskResponseDto;
 import com.example.taskflow.domain.task.entity.Task;
@@ -81,34 +82,33 @@ class DashboardServiceTest {
         assertThat(result.getSuccessMyRate()).isEqualTo(0.0);
     }
 
-//    @Test
-//    @DisplayName("대시보드에 내 테스크 목록 출력 테스트")
-//    void dashboardMyTask() {
-//        //given
-//        User user = new User();
-//        ReflectionTestUtils.setField(user, "id", 1L);
-//        Pageable pageable = PageRequest.of(0, 10);
-//        Task task = Task.builder()
-//                .id(1L)
-//                .title("title")
-//                .description("desc")
-//                .priority(TaskPriority.MEDIUM)
-//                .assignedUser(user)
-//                .createdUser(user)
-//                .status(TaskStatus.TODO)
-//                .startLine(LocalDate.now())
-//                .deadLine(LocalDate.now().plusDays(3))
-//                .build();
-//        ReflectionTestUtils.setField(task, "id", 1L);
-//        PageImpl<Task> tasks = new PageImpl<>(List.of(task));
-//        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
-//        when(taskRepository.findByAssignedUserAndIsDeletedFalse(user , pageable)).thenReturn(tasks);
-//        //when
-//        Page<TaskResponseDto> result = dashboardService.dashboardMyTask(user.getId(), null, pageable);
-//        //then
-//        assertThat(result.getContent().get(0).getId()).isEqualTo(1L);
-//        verify(taskRepository).findByAssignedUserAndIsDeletedFalse(user , pageable);
-//    }
+    @Test
+    @DisplayName("대시보드에 내 테스크 목록 출력 테스트")
+    void dashboardMyTask() {
+        //given
+        User user = new User();
+        ReflectionTestUtils.setField(user, "id", 1L);
+        Pageable pageable = PageRequest.of(0, 10);
+        Task task = Task.builder()
+                .id(1L)
+                .title("title")
+                .description("desc")
+                .priority(TaskPriority.MEDIUM)
+                .assignedUser(user)
+                .status(TaskStatus.TODO)
+                .dueDate(LocalDate.now().plusDays(3))
+                .build();
+        ReflectionTestUtils.setField(task, "id", 1L);
+        PageImpl<Task> tasks = new PageImpl<>(List.of(task));
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+        when(taskRepository.findByAssignedUserAndIsDeletedFalse(user , pageable)).thenReturn(tasks);
+        //when
+        Page<TaskResponseDto> result = dashboardService.dashboardMyTask(user.getId(), null, pageable);
+        //then
+        assertThat(result.getContent().get(0).getId()).isEqualTo(1L);
+        verify(taskRepository).findByAssignedUserAndIsDeletedFalse(user , pageable);
+    }
+
 
     @Test
     @DisplayName("태스크 상태에 해당하는 내 테스크 목록 확인 테스트")
@@ -123,10 +123,8 @@ class DashboardServiceTest {
                 .description("desc")
                 .priority(TaskPriority.MEDIUM)
                 .assignedUser(user)
-                .createdUser(user)
                 .status(TaskStatus.TODO)
-                .startLine(LocalDate.now())
-                .deadLine(LocalDate.now().plusDays(3))
+                .dueDate(LocalDate.now().plusDays(3))
                 .build();
         ReflectionTestUtils.setField(task, "id", 1L);
         PageImpl<Task> tasks = new PageImpl<>(List.of(task));
@@ -134,9 +132,12 @@ class DashboardServiceTest {
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
         when(taskRepository.findByAssignedUserAndStatusAndIsDeletedFalse(user, taskStatus, pageable)).thenReturn(tasks);
         //when
-        dashboardService.dashboardMyTask(user.getId(), taskStatus,  pageable);
+        Page<TaskResponseDto> result = dashboardService.dashboardMyTask(user.getId(), taskStatus, pageable);
         //then
+        assertThat(result.getTotalElements()).isEqualTo(1);
+        assertThat(result.getContent().get(0).getId()).isEqualTo(1L);
         verify(taskRepository).findByAssignedUserAndStatusAndIsDeletedFalse(user, taskStatus, pageable);
+
     }
 
     @Test
@@ -144,12 +145,13 @@ class DashboardServiceTest {
     void dashboardOver() {
         //given
         List<TaskStatus> running = List.of(TaskStatus.TODO, TaskStatus.IN_PROGRESS);
-        when(taskRepository.countByStatusInAndDeadLineBeforeAndIsDeletedFalse(running, LocalDate.now())).thenReturn(1L);
+        when(taskRepository.countByStatusInAndDueDateBeforeAndIsDeletedFalse(running, LocalDate.now())).thenReturn(1L);
 
         //when
-        dashboardService.dashboardOver();
+        DashboardOverResponse result = dashboardService.dashboardOver();
         //then
-        verify(taskRepository).countByStatusInAndDeadLineBeforeAndIsDeletedFalse(running, LocalDate.now());
+        assertThat(result.getTaskOver()).isEqualTo(1);
+        verify(taskRepository).countByStatusInAndDueDateBeforeAndIsDeletedFalse(running, LocalDate.now());
 
     }
 }
