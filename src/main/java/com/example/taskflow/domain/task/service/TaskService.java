@@ -89,7 +89,7 @@ public class TaskService {
         User assignee = userRepository.findById(assigneeId)
                 .orElseThrow(()-> new BaseException(ErrorCode.USER_NOT_FOUND));
 
-        task.updateTask(updateDto.getPriority(), assignee, updateDto.getDeadLine());
+        task.updateTask(updateDto.getPriority(), assignee, updateDto.getDueDate(),updateDto.getTitle(),updateDto.getDescription(),updateDto.getStatus());
         return toDto(task);
     }
 
@@ -118,18 +118,17 @@ public class TaskService {
     }
 
     /**
-     * 주어진 ID의 Task 상태를 한 단계 앞 또는 뒤로 변경합니다.
-     * 상태는 {@code TODO ↔ IN_PROGRESS ↔ DONE} 순으로 정의되며,
-     * 현재 상태에서 한 단계만 이동할 수 있습니다.
-     * 예를 들어 {@code TODO → IN_PROGRESS}, {@code IN_PROGRESS → DONE},
-     * 또는 반대로 {@code DONE → IN_PROGRESS}, {@code IN_PROGRESS → TODO} 이동은 가능하지만,
-     * {@code TODO → DONE} 또는 {@code DONE → TODO}와 같은 두 단계 이상 이동은 허용되지 않습니다
+     * 주어진 ID의 Task 상태를 한 단계 앞으로만 변경합니다.
+     * 상태는 {@code TODO → IN_PROGRESS → DONE} 순으로 정의되며,
+     * 현재 상태에서 한 단계 앞으로만 이동할 수 있습니다.
+     * {@code TODO → DONE} 또는 {@code IN_PROGRESS → TODO}, {@code DONE → IN_PROGRESS} 등
+     * 역방향 또는 두 단계 이상의 이동은 허용되지 않습니다.
      *
      * @param requestDto 상태 변경 요청 DTO
      * @param id         대상 Task의 ID
      * @return 상태가 변경된 Task의 DTO
      * @throws BaseException TASK_NOT_FOUND: ID에 해당하는 Task가 존재하지 않을 때
-     *                       TASK_STATE_FLOW_ERROR: 허용되지 않는 상태 변경일 때 (두 단계 이상 이동 시도)
+     *                       TASK_STATE_FLOW_ERROR: 허용되지 않는 상태 변경일 때
      */
     @Transactional
     public TaskResponseDto updateTaskStatus(TaskStatusUpdateRequestDto requestDto, Long id) {
@@ -141,13 +140,14 @@ public class TaskService {
 
         int diff = requestedStatus.ordinal() - currentStatus.ordinal();
 
-        // 한 단계 이동이 아닌 경우 예외 발생
-        if (Math.abs(diff) != 1) {
+        // 한 단계 앞으로만 이동 가능
+        if (diff != 1) {
             throw new BaseException(ErrorCode.TASK_STATE_FLOW_ERROR);
         }
 
         task.changeStatus(requestedStatus);
         return toDto(task);
     }
+
 
 }
