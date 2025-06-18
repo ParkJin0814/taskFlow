@@ -15,8 +15,7 @@ public class TaskUpdateRequestDto {
     private TaskPriority priority;
 
     @NotNull
-    private Long assignedUserId;
+    private Long assigneeId;
 
-    @NotNull
     private LocalDate deadLine;
 }

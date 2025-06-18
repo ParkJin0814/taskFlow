@@ -33,7 +33,7 @@ public class UserController {
     public ResponseEntity searchUsers(
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        return ResponseEntity.ok(List.of(userService.myProfile(userDetails)));
+        return ResponseEntity.ok(userService.findUsers());
     }
 
 }

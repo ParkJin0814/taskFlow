@@ -13,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 @Service
 @Slf4j
@@ -46,6 +48,11 @@ public class UserService {
                 user.getRole(),
                 user.getCreatedAt()
         ));
+    }
+
+    public ApiResponse<List<MyProfileResponse>> findUsers(){
+        List<MyProfileResponse> userList = userRepository.findAll().stream().map(MyProfileResponse::toDto).toList();
+        return ApiResponse.ok("조회됨",userList);
     }
 
 }
