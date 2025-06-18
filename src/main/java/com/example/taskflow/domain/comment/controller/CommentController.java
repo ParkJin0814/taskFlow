@@ -1,17 +1,23 @@
 package com.example.taskflow.domain.comment.controller;
 
+import com.example.taskflow.domain.common.dto.PagedResponse;
 import com.example.taskflow.global.config.aop.Logging;
 import com.example.taskflow.domain.comment.dto.CommentRequestDto;
 import com.example.taskflow.domain.comment.dto.CommentResponseDto;
 import com.example.taskflow.domain.comment.entity.Comment;
 import com.example.taskflow.domain.comment.service.CommentService;
 import com.example.taskflow.domain.common.dto.ApiResponse;
+import com.example.taskflow.global.dto.CustomUserDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,36 +25,51 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    Long authorId = 1L;  //임시
-
 
     // 댓글 생성
     @PostMapping("/api/tasks/{taskId}/comment")
     @Logging
     public ResponseEntity<ApiResponse<CommentResponseDto>> createComment(
             @PathVariable Long taskId,
-            @RequestBody @Valid CommentRequestDto requestDto) {
+            @RequestBody @Valid CommentRequestDto requestDto,
+            @AuthenticationPrincipal CustomUserDetails userDetails){
 
-        CommentResponseDto responseDto = commentService.createComment(taskId, authorId, requestDto);
+        Long userId = userDetails.getUserId();
+
+        CommentResponseDto responseDto = commentService.createComment(taskId, userId, requestDto);
         return ResponseEntity.ok(ApiResponse.ok("댓글이 생성되었습니다.", responseDto));
 
     }
 
     // 특정 태스크의 댓글 조회
     @GetMapping("/api/tasks/{taskId}/comments")
-    public ResponseEntity<ApiResponse<List<CommentResponseDto>>> getCommentsByTask(
-            @PathVariable Long taskId) {
+    public ResponseEntity<ApiResponse<PagedResponse<CommentResponseDto>>> getCommentsByTask(
+            @PathVariable Long taskId,
+            @PageableDefault(
+                    size = 10,
+                    sort = "createdAt",
+                    direction = Sort.Direction.DESC) Pageable pageable) {
 
-        List<CommentResponseDto> responseList = commentService.getCommentsByTask(taskId);
-        return ResponseEntity.ok(ApiResponse.ok("테스크의 댓글을 조회하였습니다.", responseList));
+        Page<CommentResponseDto> commentPage = commentService.getCommentsByTask(taskId, pageable);
+
+        PagedResponse<CommentResponseDto> pagedResponse = PagedResponse.from(commentPage);
+
+        return ResponseEntity.ok(ApiResponse.ok("댓글 목록을 조회했습니다.", pagedResponse));
     }
 
     // 댓글 검색 (특정 게시물의 댓글 중 Like 검색, 키워드 검색)
     @GetMapping("/api/tasks/{taskId}/comment/search")
-    public ResponseEntity<ApiResponse<List<CommentResponseDto>>> searchComments(@RequestParam String keyword) {
+    public ResponseEntity<ApiResponse<PagedResponse<CommentResponseDto>>> searchComments(
+            @RequestParam String keyword,
+            @PageableDefault(
+                    size = 10,
+                    sort = "createdAt",
+                    direction = Sort.Direction.DESC) Pageable pageable) {
 
-        List<CommentResponseDto> responseList = commentService.searchComments(keyword);
-        return ResponseEntity.ok(ApiResponse.ok("키워드가 포함된 댓글이 검색되었습니다.", responseList));
+        Page<CommentResponseDto> commentPage = commentService.searchComments(keyword, pageable);
+        PagedResponse<CommentResponseDto> pagedResponse = PagedResponse.from(commentPage);
+
+        return ResponseEntity.ok(ApiResponse.ok("키워드가 포함된 댓글이 검색되었습니다.", pagedResponse));
     }
 
     // 댓글 수정

@@ -11,6 +11,7 @@ import com.example.taskflow.domain.user.repository.UserRepository;
 import com.example.taskflow.global.config.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,5 +90,31 @@ public class AuthService {
         String bearerToken = jwtUtil.generateToken(user.getId(), user.getUsername(), user.getEmail(), user.getRole()).substring(7);
 
         return ApiResponse.ok("로그인이 완료되었습니다.", new LoginResponse(bearerToken));
+    }
+
+    /**
+     * 회원 탈퇴
+     *
+     * @param userDetails 로그인 된 유저 JWT토큰의 정보 (username 등)
+     * @param password 패스워드 확인
+     * @return 회원 탈퇴 완료 메시지
+     */
+    @Transactional
+    public ApiResponse withdraw(UserDetails userDetails, String password) {
+
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(()-> new BaseException(ErrorCode.USER_NOT_FOUND));
+
+        if (user.isDeleted()) {
+            throw new BaseException(ErrorCode.USER_DEACTIVATED);
+        }
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new BaseException(ErrorCode.INVALID_PASSWORD);
+        }
+
+        user.softDelete();
+        return ApiResponse.ok("회원 탈퇴가 완료되었습니다.", null);
+
     }
 }

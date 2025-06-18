@@ -12,10 +12,10 @@ import com.example.taskflow.domain.user.entity.User;
 import com.example.taskflow.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.example.taskflow.domain.comment.dto.CommentResponseDto.toDto;
 
@@ -51,25 +51,23 @@ public class CommentService {
 
 
     // 특정 task의 댓글 조회 (삭제 안된 것만 조회, 최신순)
-    public List<CommentResponseDto> getCommentsByTask(Long taskId) {
+    public Page<CommentResponseDto> getCommentsByTask(Long taskId, Pageable pageable) {
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(()-> new BaseException(ErrorCode.TASK_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(ErrorCode.TASK_NOT_FOUND));
 
-        List<Comment> commentList = commentRepository.findByTaskIdAndIsDeletedFalseOrderByCreatedAtDesc(task);
-        return commentList.stream()
-                .map(CommentResponseDto::toDto)
-                .collect(Collectors.toList());
+        Page<Comment> commentPage = commentRepository.findByTaskIdAndIsDeletedFalseOrderByCreatedAtDesc(task, pageable);
+
+        // Page<Comment> -> Page<CommentResponseDto> 변환
+        return commentPage.map(CommentResponseDto::toDto);
     }
 
 
     // 댓글 내용 검색 (삭제 안된 것만, 키워드 검색)
-    public List<CommentResponseDto> searchComments(String keyword) {
-        List<Comment> commentList = commentRepository.findByContentContainingAndIsDeletedFalse(keyword);
-        return commentList.stream()
-                .map(CommentResponseDto::toDto)
-                .collect(Collectors.toList());
-    }
+    public Page<CommentResponseDto> searchComments(String keyword, Pageable pageable) {
 
+        Page<Comment> commentPage = commentRepository.findByContentContainingAndIsDeletedFalse(keyword, pageable);
+        return commentPage.map(CommentResponseDto::toDto);
+    }
 
 
     // 댓글 수정

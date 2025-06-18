@@ -1,11 +1,8 @@
 package com.example.taskflow.domain.user.dto.response;
 
 import com.example.taskflow.domain.user.entity.User;
-import com.example.taskflow.domain.user.enums.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
