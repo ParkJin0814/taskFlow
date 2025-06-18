@@ -47,6 +47,8 @@ public class Task extends BaseEntity {
     @JoinColumn(name = "assigned_user_id", nullable = false)
     private User assignedUser;
 
+    private Long createdUserId;
+
     /** 업무 마감일 */
     private LocalDate dueDate;
 
