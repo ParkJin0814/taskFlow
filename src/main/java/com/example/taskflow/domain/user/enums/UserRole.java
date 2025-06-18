@@ -3,8 +3,6 @@ package com.example.taskflow.domain.user.enums;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Arrays;
-
 @Getter
 @RequiredArgsConstructor
 public enum UserRole {
