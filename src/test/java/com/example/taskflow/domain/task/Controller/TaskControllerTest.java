@@ -53,7 +53,7 @@ class TaskControllerTest {
     void 태스크_생성_성공() throws Exception {
 
         UserResponseDto userResponseDto = UserResponseDto.of(1L, "kmg02845", "kmg02845@gmail.com", "김민균");
-        TaskCreateRequestDto request = new TaskCreateRequestDto("제목", "설명", TaskPriority.LOW, 1L,LocalDate.now().plusDays(1), LocalDate.now(), TaskStatus.TODO);
+        TaskCreateRequestDto request = new TaskCreateRequestDto("제목", "설명", TaskPriority.LOW, 1L,LocalDate.now().plusDays(1), TaskStatus.TODO);
         TaskResponseDto response = new TaskResponseDto(1L, "제목", "설명", TaskPriority.LOW, TaskStatus.IN_PROGRESS, 2L, userResponseDto, LocalDate.now().plusDays(1), LocalDateTime.now(),LocalDateTime.now());
 
         Mockito.when(taskService.createTask(any(TaskCreateRequestDto.class),any(Long.class))).thenReturn(response);
