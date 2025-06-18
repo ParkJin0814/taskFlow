@@ -1,6 +1,7 @@
 package com.example.taskflow.domain.comment.dto;
 
 import com.example.taskflow.domain.comment.entity.Comment;
+import com.example.taskflow.domain.user.dto.response.UserResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -12,8 +13,9 @@ public class CommentResponseDto {
 
     private Long id;
     private String content;
-    private String author;
     private Long taskId;
+    private Long userId;
+    private UserResponseDto user;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -22,8 +24,9 @@ public class CommentResponseDto {
         return CommentResponseDto.builder()
                 .id(comment.getId())
                 .content(comment.getContent())
-                .author(comment.getAuthor().getName())
                 .taskId(comment.getTaskId().getId())
+                .userId(comment.getAuthor().getId())
+                .user(new UserResponseDto(comment.getAuthor()))
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())
                 .build();
