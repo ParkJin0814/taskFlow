@@ -70,7 +70,7 @@ public class TaskService {
                     .map(TaskResponseDto::toDto);
         }
         else {
-            return taskRepository.findAllByStatusAndDeletedIsFalse(status,pageable)
+            return taskRepository.findAllByStatusAndIsDeletedIsFalse(status,pageable)
                     .map(TaskResponseDto::toDto);
         }
     }

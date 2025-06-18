@@ -25,7 +25,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     Long countByAssignedUserAndStatusAndIsDeletedFalse(User userId, TaskStatus taskStatus);
 
-    Long countByStatusInAndDeadLineBeforeAndIsDeletedFalse(List<TaskStatus> running, LocalDate now);
+    Long countByStatusInAndDueDateBeforeAndIsDeletedFalse(List<TaskStatus> running, LocalDate now);
 
     @EntityGraph(attributePaths = {"assignedUser"})
     Page<Task> findByAssignedUserAndStatusAndIsDeletedFalse(User assignedUser, TaskStatus status, Pageable pageable);
@@ -39,7 +39,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     Page<Task> findTasksByTitleContainingOrDescriptionContainingAndDeletedIsFalse(String searchTitle,String searchDescrip, Pageable pageable);
 
     @EntityGraph(attributePaths = {"assignedUser"})
-    Page<Task> findAllByStatusAndDeletedIsFalse(TaskStatus status, Pageable pageable);
+    Page<Task> findAllByStatusAndIsDeletedIsFalse(TaskStatus status, Pageable pageable);
 
     @EntityGraph(attributePaths = {"assignedUser"})
     Page<Task> findAllByIsDeletedIsFalse(Pageable pageable);

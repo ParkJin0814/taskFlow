@@ -50,12 +50,12 @@ public class TaskRepositoryTest {
         User user = new User(null, "유저", "u@test.com", "pw", "user", UserRole.USER);
         userRepository.save(user);
 
-        Task task1 = new Task(null, "t1", "내용1", TaskPriority.LOW, user, user,
-                LocalDate.now(), LocalDate.now().plusDays(7), TaskStatus.TODO);
-        Task task2 = new Task(null, "t2", "내용2", TaskPriority.MEDIUM, user, user,
-                LocalDate.now(), LocalDate.now().plusDays(7), TaskStatus.TODO);
-        Task task3 = new Task(null, "t3", "내용3", TaskPriority.HIGH, user, user,
-                LocalDate.now(), LocalDate.now().plusDays(7), TaskStatus.DONE);
+        Task task1 = new Task(null, "t1", "내용1", TaskPriority.LOW, user,
+                 LocalDate.now().plusDays(7), TaskStatus.TODO);
+        Task task2 = new Task(null, "t2", "내용2", TaskPriority.LOW, user,
+                LocalDate.now().plusDays(7), TaskStatus.TODO);
+        Task task3 = new Task(null, "t3", "내용3", TaskPriority.LOW, user,
+                LocalDate.now().plusDays(7), TaskStatus.TODO);
 
         taskRepository.save(task1);
         taskRepository.save(task2);
@@ -74,13 +74,13 @@ public class TaskRepositoryTest {
         User user = new User(null, "user", "email", "pw", "nickname", UserRole.USER);
         userRepository.save(user);
 
-        Task deletedTask = new Task(null, "t2", "내용2", TaskPriority.LOW, user, user,
-                LocalDate.now(), LocalDate.now().plusDays(7), TaskStatus.DONE);
+        Task deletedTask = new Task(null, "t2", "내용2", TaskPriority.LOW,  user,
+            LocalDate.now().plusDays(7), TaskStatus.DONE);
 
         deletedTask.softDelete();
 
-        taskRepository.save(new Task(null, "t1", "내용1", TaskPriority.LOW, user, user,
-                LocalDate.now(),LocalDate.now().plusDays(7), TaskStatus.TODO));
+        taskRepository.save(new Task(null, "t1", "내용1", TaskPriority.LOW, user,
+                LocalDate.now().plusDays(7), TaskStatus.TODO));
         taskRepository.save(deletedTask);
 
         // when
