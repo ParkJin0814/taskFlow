@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `tasks` (
                         `status` ENUM('TODO', 'IN_PROGRESS', 'DONE') NOT NULL DEFAULT 'TODO' COMMENT '상태',
                         `assigned_user_id`	BIGINT	NOT NULL	COMMENT ' 태스크를 담당하는 사용자 id',
                         `created_user_id`	BIGINT	NOT NULL	COMMENT '태스크를 생성한 사용자 id',
-                        `dead_line`	TIMESTAMP	NOT NULL	COMMENT '작업 마감일',
+                        `due_date`	TIMESTAMP	NOT NULL	COMMENT '작업 마감일',
                         `start_line`	TIMESTAMP	NOT NULL	COMMENT '작업 시작일',
                         `is_deleted`	BOOLEAN	NOT NULL DEFAULT FALSE	COMMENT '삭제 여부 플래그',
                         `deleted_at`	TIMESTAMP	NULL	COMMENT '삭제일',

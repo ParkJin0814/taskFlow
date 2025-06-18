@@ -55,7 +55,7 @@ public class DashboardService {
 
     public DashboardOverResponse dashboardOver() {
         List<TaskStatus> running = List.of(TaskStatus.TODO, TaskStatus.IN_PROGRESS);
-        return new DashboardOverResponse(taskRepository.countByStatusInAndDeadLineBeforeAndIsDeletedFalse(running, LocalDate.now()));
+        return new DashboardOverResponse(taskRepository.countByStatusInAndDueDateBeforeAndIsDeletedFalse(running, LocalDate.now()));
     }
 
     private Long totalTasks() {
