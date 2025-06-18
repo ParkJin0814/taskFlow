@@ -21,8 +21,6 @@ public class TaskUpdateRequestDto {
     @NotNull
     private TaskPriority priority;
 
-    private TaskStatus status;
-
     @NotNull
     private Long assigneeId;
 
