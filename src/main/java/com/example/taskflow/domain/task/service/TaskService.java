@@ -36,9 +36,6 @@ public class TaskService {
     public TaskResponseDto createTask(TaskCreateRequestDto dto,Long id) {
         User assignedUser = userRepository.findById(dto.assignedId())
                 .orElseThrow(()-> new BaseException(ErrorCode.USER_NOT_FOUND));
-        User createdUser = userRepository.findById(1L)
-                .orElseThrow(()-> new BaseException(ErrorCode.USER_NOT_FOUND));
-
 
         Task task = Task.builder()
                 .title(dto.title())
@@ -74,10 +71,6 @@ public class TaskService {
                     .map(TaskResponseDto::toDto);
         }
     }
-
-    //[task1,task2,task3]
-
-    //[taskResponse,taskResponse2,taskResponse3]
 
     /**
      * 특정 Task를 수정합니다.
