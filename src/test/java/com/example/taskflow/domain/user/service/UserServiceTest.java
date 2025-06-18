@@ -41,7 +41,7 @@ class UserServiceTest {
 
 
     @Test
-    @DisplayName("myProfile - 회원 조회 예외")
+    @DisplayName("myProfile - 없는 회원 예외")
     void 유저_정보_찾고_없으면_예외처리() {
 
         // given

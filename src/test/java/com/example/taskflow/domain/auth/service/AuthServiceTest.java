@@ -45,7 +45,7 @@ class AuthServiceTest {
     );
 
     @Test
-    @DisplayName("register - 회원 조회 예외")
+    @DisplayName("register - 이미 있는 사용자명 예외")
     void 가입된_username_있으면_예외처리() {
 
         // given
@@ -60,7 +60,7 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("register - 삭제 회원 예외")
+    @DisplayName("register - 이미 있는 이메일 예외")
     void 가입된_email_있으면_예외처리() {
 
         // given
@@ -101,7 +101,7 @@ class AuthServiceTest {
 
 
     @Test
-    @DisplayName("login - 회원 조회 예외")
+    @DisplayName("login - 없는 회원 예외")
     void 유저_정보_찾고_없다면_예외처리() {
 
         // given
@@ -179,7 +179,7 @@ class AuthServiceTest {
 
 
     @Test
-    @DisplayName("withdraw - 회원 조회 예외")
+    @DisplayName("withdraw - 없는 회원 예외")
     void 유저_정보_찾고_없으면_예외처리() {
 
         // given
