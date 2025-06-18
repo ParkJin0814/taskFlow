@@ -73,7 +73,7 @@ public class CommentController {
     }
 
     // 댓글 수정
-    @PutMapping("/api/tasks/{taskId}/comments/{commentId}")
+    @PutMapping("/api/comments/{commentId}")
     @Logging
     public ResponseEntity<ApiResponse<CommentResponseDto>> updateComment(
             @PathVariable Long commentId,
