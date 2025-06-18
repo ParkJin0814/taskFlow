@@ -3,6 +3,7 @@ package com.example.taskflow.global.exception;
 import com.example.taskflow.domain.auth.controller.AuthController;
 import com.example.taskflow.domain.auth.dto.request.LoginRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -30,10 +31,10 @@ class GlobalExceptionHandlerTest {
 
 
     @Test
+    @DisplayName("유효성 검사 테스트")
     void 유효성_검사_예외_테스트() throws Exception {
         // Given
         LoginRequest dto = new LoginRequest("김땡땡", null); // name이 null이라서 실패
-
 
         // When
 
