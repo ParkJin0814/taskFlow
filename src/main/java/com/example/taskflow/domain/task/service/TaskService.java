@@ -34,7 +34,7 @@ public class TaskService {
      * @return 생성된 Task의 정보를 담은 DTO
      */
     public TaskResponseDto createTask(TaskCreateRequestDto dto,Long id) {
-        User assignedUser = userRepository.findById(dto.assignedId())
+        User assignedUser = userRepository.findById(dto.assigneeId())
                 .orElseThrow(()-> new BaseException(ErrorCode.USER_NOT_FOUND));
 
         Task task = Task.builder()
@@ -84,7 +84,7 @@ public class TaskService {
         Task task = taskRepository.findById(id)
                 .orElseThrow(()-> new BaseException(ErrorCode.TASK_NOT_FOUND));
 
-        Long assigneeId = updateDto.getAssignedUserId();
+        Long assigneeId = updateDto.getAssigneeId();
 
         User assignee = userRepository.findById(assigneeId)
                 .orElseThrow(()-> new BaseException(ErrorCode.USER_NOT_FOUND));

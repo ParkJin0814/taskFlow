@@ -27,7 +27,7 @@ public class CommentController {
 
 
     // 댓글 생성
-    @PostMapping("/api/tasks/{taskId}/comment")
+    @PostMapping("/api/tasks/{taskId}/comments")
     @Logging
     public ResponseEntity<ApiResponse<CommentResponseDto>> createComment(
             @PathVariable Long taskId,
@@ -58,7 +58,7 @@ public class CommentController {
     }
 
     // 댓글 검색 (특정 게시물의 댓글 중 Like 검색, 키워드 검색)
-    @GetMapping("/api/tasks/{taskId}/comment/search")
+    @GetMapping("/api/tasks/{taskId}/comments/search")
     public ResponseEntity<ApiResponse<PagedResponse<CommentResponseDto>>> searchComments(
             @RequestParam String keyword,
             @PageableDefault(
@@ -73,7 +73,7 @@ public class CommentController {
     }
 
     // 댓글 수정
-    @PutMapping("/api/comment/{commentId}")
+    @PutMapping("/api/tasks/{taskId}/comments/{commentId}")
     @Logging
     public ResponseEntity<ApiResponse<CommentResponseDto>> updateComment(
             @PathVariable Long commentId,
@@ -85,7 +85,7 @@ public class CommentController {
     }
 
     // 댓글 삭제 (Soft Delete)
-    @DeleteMapping("/api/comment/{commentId}")
+    @DeleteMapping("/api/tasks/{taskId}/comment/{commentId}")
     @Logging
     public ResponseEntity<ApiResponse<Void>> deleteComment(
             @PathVariable Long commentId) {

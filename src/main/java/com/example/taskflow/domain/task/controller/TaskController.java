@@ -124,7 +124,7 @@ public class TaskController {
      * @param id         상태를 변경할 태스크의 ID
      * @return 상태가 변경된 태스크 정보
      */
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id}/status")
     @Logging
     public ResponseEntity<ApiResponse<TaskResponseDto>> updateTaskStatus(
             @Valid @RequestBody TaskStatusUpdateRequestDto requestDto,
