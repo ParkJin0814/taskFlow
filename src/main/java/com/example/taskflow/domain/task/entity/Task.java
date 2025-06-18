@@ -12,7 +12,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 /**
  * 업무(Task) 엔티티 클래스입니다.
@@ -48,16 +47,8 @@ public class Task extends BaseEntity {
     @JoinColumn(name = "assigned_user_id", nullable = false)
     private User assignedUser;
 
-    /** 업무 생성자 (필수) - User와 다대일 관계 */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_user_id", nullable = false)
-    private User createdUser;
-
-    /** 업무 시작일 */
-    private LocalDate startLine;
-
     /** 업무 마감일 */
-    private LocalDate deadLine;
+    private LocalDate dueDate;
 
     /** 업무 상태 (필수) - TODO / IN_PROGRESS / DONE 등 ENUM */
     @Enumerated(EnumType.STRING)
@@ -68,12 +59,12 @@ public class Task extends BaseEntity {
      * 업무 수정 (중요도, 담당자, 마감일 변경)
      * @param priority 변경할 중요도
      * @param assignedUser 변경할 담당자
-     * @param deadLine 변경할 마감일
+     * @param dueDate 변경할 마감일
      */
-    public void updateTask(TaskPriority priority, User assignedUser, LocalDate deadLine) {
+    public void updateTask(TaskPriority priority, User assignedUser, LocalDate dueDate) {
         this.priority = priority;
         this.assignedUser = assignedUser;
-        this.deadLine = deadLine;
+        this.dueDate = dueDate;
     }
 
     /**

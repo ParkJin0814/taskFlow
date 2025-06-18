@@ -36,8 +36,18 @@ public class UserController {
      * @return 회원 탈퇴 완료 메시지
      */
     @PostMapping("/deletion")
-    public ResponseEntity deletion(@AuthenticationPrincipal UserDetails userDetails, @RequestBody DeleteUserRequest deleteUserRequest) {
+    public ResponseEntity deletion(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody DeleteUserRequest deleteUserRequest)
+    {
         return ResponseEntity.ok(userService.deletion(userDetails, deleteUserRequest.getPassword()));
+    }
+
+    @GetMapping
+    public ResponseEntity searchUsers(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        return ResponseEntity.ok(userService.myProfile(userDetails));
     }
 
 }
