@@ -1,6 +1,6 @@
 package com.example.taskflow.domain.auth.controller;
 
-import com.example.taskflow.domain.user.dto.request.DeleteUserRequest;
+import com.example.taskflow.domain.auth.dto.request.WithdrawUserRequest;
 import com.example.taskflow.global.config.aop.Logging;
 import com.example.taskflow.domain.auth.dto.request.LoginRequest;
 import com.example.taskflow.domain.auth.dto.request.RegisterRequest;
@@ -57,7 +57,7 @@ public class AuthController {
     @PostMapping("/withdraw")
     public ResponseEntity withdraw(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody DeleteUserRequest deleteUserRequest)
+            @Valid @RequestBody WithdrawUserRequest deleteUserRequest)
     {
         return ResponseEntity.ok(authService.withdraw(userDetails, deleteUserRequest.getPassword()));
     }

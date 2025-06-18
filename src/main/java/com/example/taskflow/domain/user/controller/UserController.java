@@ -1,6 +1,5 @@
 package com.example.taskflow.domain.user.controller;
 
-import com.example.taskflow.domain.user.dto.request.DeleteUserRequest;
 import com.example.taskflow.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
