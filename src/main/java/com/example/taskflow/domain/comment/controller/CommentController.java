@@ -85,7 +85,7 @@ public class CommentController {
     }
 
     // 댓글 삭제 (Soft Delete)
-    @DeleteMapping("/api/tasks/{taskId}/comment/{commentId}")
+    @DeleteMapping("/api/comments/{commentId}")
     @Logging
     public ResponseEntity<ApiResponse<Void>> deleteComment(
             @PathVariable Long commentId) {
