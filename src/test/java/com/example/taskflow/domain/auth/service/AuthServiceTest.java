@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -156,13 +157,88 @@ class AuthServiceTest {
         given(passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())).willReturn(true);
 
         doReturn(UserRole.USER).when(user).getRole();
-        given(jwtUtil.generateToken(any(), any(), any(), any())).willReturn("token");
+        given(jwtUtil.generateToken(any(), any(), any(), any())).willReturn("JWTtoken");
 
         // when
         ApiResponse response = authService.login(loginRequest);
 
         // then
         assertEquals("로그인이 완료되었습니다.", response.getMessage());
+
+    }
+
+
+    // 공통 given
+    UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
+            .username("테스트")
+            .password("")
+            .authorities("ROLE_USER")
+            .build();
+
+    // deletion 공통 given
+    String password = "password1!";
+
+
+    @Test
+    @DisplayName("deletion - 회원 조회 예외")
+    void 유저_정보_찾고_없으면_예외처리() {
+
+        // given
+
+        // when
+        BaseException e = Assertions.assertThrows(BaseException.class, () -> authService.withdraw(userDetails, password));
+
+        // then
+        assertEquals("사용자를 찾을 수 없습니다", e.getMessage());
+
+    }
+
+    @Test
+    @DisplayName("deletion - 삭제 회원 예외")
+    void 유저_정보_있는데_탈퇴_회원이라면_예외처리() {
+
+        // given
+        given(userRepository.findByUsername("테스트")).willReturn(Optional.ofNullable(user));
+        doReturn(true).when(user).isDeleted();
+
+        // when
+        BaseException e = Assertions.assertThrows(BaseException.class, () -> authService.withdraw(userDetails, password));
+
+        // then
+        assertEquals("탈퇴 된 회원입니다.", e.getMessage());
+
+    }
+
+    @Test
+    @DisplayName("deletion - 패스워드 불일치")
+    void 유저_정보_있고_탈퇴회원_아닌데_패스워드_불일치_예외처리() {
+
+        // given
+        given(userRepository.findByUsername("테스트")).willReturn(Optional.ofNullable(user));
+        given(passwordEncoder.matches(password, user.getPassword())).willReturn(false);
+
+        // when
+        BaseException e = Assertions.assertThrows(BaseException.class, () -> authService.withdraw(userDetails, password));
+
+        // then
+        assertEquals("비밀번호가 일치하지 않습니다", e.getMessage());
+
+    }
+
+    @Test
+    @DisplayName("deletion - 정상 처리")
+    void 유저_정보_있고_탈퇴회원_아니면_탈퇴_처리() {
+
+        // given
+        given(userRepository.findByUsername("테스트")).willReturn(Optional.ofNullable(user));
+        given(passwordEncoder.matches(password, user.getPassword())).willReturn(true);
+
+        // when
+        ApiResponse response = authService.withdraw(userDetails, password);
+
+        // then
+        verify(user).softDelete();
+        assertEquals("회원 탈퇴가 완료되었습니다.", response.getMessage());
 
     }
 }

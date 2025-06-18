@@ -48,29 +48,4 @@ public class UserService {
         ));
     }
 
-    /**
-     * 회원 탈퇴
-     *
-     * @param userDetails 로그인 된 유저 JWT토큰의 정보 (username 등)
-     * @param password 패스워드 확인
-     * @return 회원 탈퇴 완료 메시지
-     */
-    @Transactional
-    public ApiResponse deletion(UserDetails userDetails, String password) {
-
-        User user = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(()-> new BaseException(ErrorCode.USER_NOT_FOUND));
-
-        if (user.isDeleted()) {
-            throw new BaseException(ErrorCode.USER_DEACTIVATED);
-        }
-
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new BaseException(ErrorCode.INVALID_PASSWORD);
-        }
-
-        user.softDelete();
-        return ApiResponse.ok("회원 탈퇴가 완료되었습니다.", null);
-
-    }
 }

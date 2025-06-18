@@ -1,5 +1,6 @@
 package com.example.taskflow.domain.auth.controller;
 
+import com.example.taskflow.domain.user.dto.request.DeleteUserRequest;
 import com.example.taskflow.global.config.aop.Logging;
 import com.example.taskflow.domain.auth.dto.request.LoginRequest;
 import com.example.taskflow.domain.auth.dto.request.RegisterRequest;
@@ -8,6 +9,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +45,21 @@ public class AuthController {
     @Logging
     public ResponseEntity login(@Valid @RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(authService.login(loginRequest));
+    }
+
+    /**
+     * 회원 탈퇴
+     *
+     * @param userDetails 로그인 된 유저 JWT토큰의 정보 (username 등)
+     * @param deleteUserRequest 유저 입력 작성 폼 (password)
+     * @return 회원 탈퇴 완료 메시지
+     */
+    @PostMapping("/withdraw")
+    public ResponseEntity withdraw(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody DeleteUserRequest deleteUserRequest)
+    {
+        return ResponseEntity.ok(authService.withdraw(userDetails, deleteUserRequest.getPassword()));
     }
 
 }
