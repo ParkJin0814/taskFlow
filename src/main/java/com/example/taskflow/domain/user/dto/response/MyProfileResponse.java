@@ -1,5 +1,6 @@
 package com.example.taskflow.domain.user.dto.response;
 
+import com.example.taskflow.domain.user.entity.User;
 import com.example.taskflow.domain.user.enums.UserRole;
 import lombok.Getter;
 
@@ -22,6 +23,17 @@ public class MyProfileResponse {
         this.name = name;
         this.role = role;
         this.createdAt = createdAt;
+    }
+
+    public static MyProfileResponse toDto(User user){
+        return new MyProfileResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getName(),
+                user.getRole(),
+                user.getCreatedAt()
+        );
     }
 
 }
