@@ -1,5 +1,6 @@
 package com.example.taskflow.domain.task.controller;
 
+import com.example.taskflow.domain.task.repository.TaskRepository;
 import com.example.taskflow.global.config.aop.Logging;
 import com.example.taskflow.domain.common.dto.ApiResponse;
 import com.example.taskflow.domain.common.dto.PagedResponse;
@@ -31,6 +32,7 @@ import org.springframework.data.domain.Pageable;
 public class TaskController {
 
     private final TaskService taskService;
+    private final TaskRepository taskRepository;
 
     /**
      * 새로운 태스크를 생성합니다.
@@ -69,6 +71,14 @@ public class TaskController {
         Page<TaskResponseDto> taskResponseDtoList = taskService.searchTasks(pageable, status,search, assignedId);
         PagedResponse<TaskResponseDto> pagedResponse = PagedResponse.from(taskResponseDtoList);
         return ResponseEntity.ok(ApiResponse.ok("태스크를 조회하였습니다.", pagedResponse));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<TaskResponseDto>> getTask(
+            @PathVariable Long id
+    ) {
+        TaskResponseDto dto = taskService.findTask(id);
+        return ResponseEntity.ok(ApiResponse.ok("태스크를 조회하였습니다.", dto));
     }
 
     /**

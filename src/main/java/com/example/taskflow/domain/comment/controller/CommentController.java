@@ -35,7 +35,7 @@ public class CommentController {
     }
 
     // 특정 태스크의 댓글 조회
-    @GetMapping("/api/tasks/{taskId}/comment")
+    @GetMapping("/api/tasks/{taskId}/comments")
     public ResponseEntity<ApiResponse<List<CommentResponseDto>>> getCommentsByTask(
             @PathVariable Long taskId) {
 

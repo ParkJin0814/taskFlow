@@ -22,7 +22,7 @@ public record TaskCreateRequestDto(
         @NotNull TaskPriority priority,
         Long assignedId,
         LocalDate dueDate,
-        @NotNull TaskStatus status
+        TaskStatus status
 ) {
 
 }

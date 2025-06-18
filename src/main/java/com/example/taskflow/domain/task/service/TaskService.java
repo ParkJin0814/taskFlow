@@ -93,6 +93,11 @@ public class TaskService {
         return toDto(task);
     }
 
+    public TaskResponseDto findTask(Long id){
+        Task task = taskRepository.findById(id).orElseThrow(() -> new BaseException(ErrorCode.USER_NOT_FOUND));
+        return toDto(task);
+    }
+
     /**
      * 특정 Task를 논리 삭제 처리합니다.
      *
