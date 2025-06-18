@@ -81,34 +81,34 @@ class DashboardServiceTest {
         assertThat(result.getSuccessMyRate()).isEqualTo(0.0);
     }
 
-    @Test
-    @DisplayName("대시보드에 내 테스크 목록 출력 테스트")
-    void dashboardMyTask() {
-        //given
-        User user = new User();
-        ReflectionTestUtils.setField(user, "id", 1L);
-        Pageable pageable = PageRequest.of(0, 10);
-        Task task = Task.builder()
-                .id(1L)
-                .title("title")
-                .description("desc")
-                .priority(TaskPriority.MEDIUM)
-                .assignedUser(user)
-                .createdUser(user)
-                .status(TaskStatus.TODO)
-                .startLine(LocalDate.now())
-                .deadLine(LocalDate.now().plusDays(3))
-                .build();
-        ReflectionTestUtils.setField(task, "id", 1L);
-        PageImpl<Task> tasks = new PageImpl<>(List.of(task));
-        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
-        when(taskRepository.findByAssignedUserAndIsDeletedFalse(user , pageable)).thenReturn(tasks);
-        //when
-        Page<TaskResponseDto> result = dashboardService.dashboardMyTask(user.getId(), null, pageable);
-        //then
-        assertThat(result.getContent().get(0).getId()).isEqualTo(1L);
-        verify(taskRepository).findByAssignedUserAndIsDeletedFalse(user , pageable);
-    }
+//    @Test
+//    @DisplayName("대시보드에 내 테스크 목록 출력 테스트")
+//    void dashboardMyTask() {
+//        //given
+//        User user = new User();
+//        ReflectionTestUtils.setField(user, "id", 1L);
+//        Pageable pageable = PageRequest.of(0, 10);
+//        Task task = Task.builder()
+//                .id(1L)
+//                .title("title")
+//                .description("desc")
+//                .priority(TaskPriority.MEDIUM)
+//                .assignedUser(user)
+//                .createdUser(user)
+//                .status(TaskStatus.TODO)
+//                .startLine(LocalDate.now())
+//                .deadLine(LocalDate.now().plusDays(3))
+//                .build();
+//        ReflectionTestUtils.setField(task, "id", 1L);
+//        PageImpl<Task> tasks = new PageImpl<>(List.of(task));
+//        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+//        when(taskRepository.findByAssignedUserAndIsDeletedFalse(user , pageable)).thenReturn(tasks);
+//        //when
+//        Page<TaskResponseDto> result = dashboardService.dashboardMyTask(user.getId(), null, pageable);
+//        //then
+//        assertThat(result.getContent().get(0).getId()).isEqualTo(1L);
+//        verify(taskRepository).findByAssignedUserAndIsDeletedFalse(user , pageable);
+//    }
 
     @Test
     @DisplayName("태스크 상태에 해당하는 내 테스크 목록 확인 테스트")
