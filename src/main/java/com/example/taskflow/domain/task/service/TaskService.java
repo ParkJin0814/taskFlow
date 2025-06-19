@@ -89,7 +89,7 @@ public class TaskService {
         User assignee = userRepository.findById(assigneeId)
                 .orElseThrow(()-> new BaseException(ErrorCode.USER_NOT_FOUND));
 
-        task.updateTask(updateDto.getPriority(), assignee, updateDto.getDueDate(),updateDto.getTitle(),updateDto.getDescription(),updateDto.getStatus());
+        task.updateTask(updateDto.getPriority(), assignee, updateDto.getDueDate(),updateDto.getTitle(),updateDto.getDescription());
         return toDto(task);
     }
 

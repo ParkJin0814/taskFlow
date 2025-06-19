@@ -63,13 +63,12 @@ public class Task extends BaseEntity {
      * @param assignedUser 변경할 담당자
      * @param dueDate 변경할 마감일
      */
-    public void updateTask(TaskPriority priority, User assignedUser, LocalDate dueDate,String title,String description,TaskStatus status) {
+    public void updateTask(TaskPriority priority, User assignedUser, LocalDate dueDate,String title,String description) {
         this.priority = priority;
         this.assignedUser = assignedUser;
         this.dueDate = dueDate;
         this.title = title;
         this.description = description;
-        this.status = status;
     }
 
     /**
