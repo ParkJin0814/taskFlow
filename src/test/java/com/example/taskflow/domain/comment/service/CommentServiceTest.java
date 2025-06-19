@@ -46,11 +46,10 @@ class CommentServiceTest {
 
 
     @Test
-    void 댓글_생성_성공() {
+    void 댓글_생성_테스트() {
         Long taskId = 1L;
         Long authorId = 2L;
-        CommentRequestDto requestDto = new CommentRequestDto();
-        requestDto.setContent("new comment");
+        CommentRequestDto requestDto = new CommentRequestDto("new comment");
 
         Task task = mock(Task.class);
         User author = mock(User.class);
@@ -66,6 +65,24 @@ class CommentServiceTest {
         verify(commentRepository, times(1)).save(any(Comment.class));
     }
 
+    @Test
+    void 댓글_수정_테스트() {
+        Long commentId = 1L;
+        CommentRequestDto requestDto = new CommentRequestDto("수정된 댓글 내용");
+
+        Comment existingComment = mock(Comment.class);
+
+        when(commentRepository.findById(commentId)).thenReturn(Optional.of(existingComment));
+
+        // updateComment 메서드에서 comment.setContent()가 호출되므로, 실제 setContent 호출을 검증
+        doNothing().when(existingComment).setContent(requestDto.getContent());
+
+        Comment updatedComment = commentService.updateComment(commentId, requestDto);
+
+        assertNotNull(updatedComment);
+        verify(commentRepository).findById(commentId);
+        verify(existingComment).setContent("수정된 댓글 내용");
+    }
 
 
     // 댓글 삭제 시 softDelete() 메서드가 호출되어 isDeleted 플래그가 변경되는지 테스트
@@ -82,5 +99,6 @@ class CommentServiceTest {
         // comment 객체의 softDelete() 메서드가 호출됐는지 검증
         verify(mockComment, times(1)).softDelete();
     }
+
 
 }

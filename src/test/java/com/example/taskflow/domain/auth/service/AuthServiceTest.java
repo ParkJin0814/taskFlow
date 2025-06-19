@@ -45,7 +45,7 @@ class AuthServiceTest {
     );
 
     @Test
-    @DisplayName("register - 회원 조회 예외")
+    @DisplayName("register - 이미 있는 사용자명 예외")
     void 가입된_username_있으면_예외처리() {
 
         // given
@@ -60,7 +60,7 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("register - 삭제 회원 예외")
+    @DisplayName("register - 이미 있는 이메일 예외")
     void 가입된_email_있으면_예외처리() {
 
         // given
@@ -101,7 +101,7 @@ class AuthServiceTest {
 
 
     @Test
-    @DisplayName("login - 회원 조회 예외")
+    @DisplayName("login - 없는 회원 예외")
     void 유저_정보_찾고_없다면_예외처리() {
 
         // given
@@ -168,19 +168,18 @@ class AuthServiceTest {
     }
 
 
-    // 공통 given
+    // withdraw 공통 given
     UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
             .username("테스트")
             .password("")
             .authorities("ROLE_USER")
             .build();
 
-    // deletion 공통 given
     String password = "password1!";
 
 
     @Test
-    @DisplayName("deletion - 회원 조회 예외")
+    @DisplayName("withdraw - 없는 회원 예외")
     void 유저_정보_찾고_없으면_예외처리() {
 
         // given
@@ -194,7 +193,7 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("deletion - 삭제 회원 예외")
+    @DisplayName("withdraw - 삭제 회원 예외")
     void 유저_정보_있는데_탈퇴_회원이라면_예외처리() {
 
         // given
@@ -210,7 +209,7 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("deletion - 패스워드 불일치")
+    @DisplayName("withdraw - 패스워드 불일치")
     void 유저_정보_있고_탈퇴회원_아닌데_패스워드_불일치_예외처리() {
 
         // given
@@ -226,7 +225,7 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("deletion - 정상 처리")
+    @DisplayName("withdraw - 정상 처리")
     void 유저_정보_있고_탈퇴회원_아니면_탈퇴_처리() {
 
         // given
