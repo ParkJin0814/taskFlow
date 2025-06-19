@@ -91,9 +91,9 @@ class TaskServiceTest {
 
     @Test
     void 태스크_업데이트_테스트() {
-        TaskUpdateRequestDto dto = new TaskUpdateRequestDto(null, null, null,TaskPriority.HIGH, null,1L);
-        when(taskRepository.findById(1L)).thenReturn(Optional.of(task));
+        TaskUpdateRequestDto dto = new TaskUpdateRequestDto(null, null, null,TaskPriority.HIGH, 1L);
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(taskRepository.findById(1L)).thenReturn(Optional.of(task));
 
         TaskResponseDto result = taskService.updateTask(1L, dto);
 
