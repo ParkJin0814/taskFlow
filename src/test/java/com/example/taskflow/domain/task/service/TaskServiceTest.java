@@ -51,16 +51,14 @@ class TaskServiceTest {
                 .description("desc")
                 .priority(TaskPriority.MEDIUM)
                 .assignedUser(user)
-                .createdUser(user)
+                .createdUserId(user.getId())
                 .status(TaskStatus.TODO)
-                .startLine(LocalDate.now())
-                .deadLine(LocalDate.now().plusDays(3))
                 .build();
     }
 
     @Test
     void 태스크_생성_테스트() {
-        TaskCreateRequestDto dto = new TaskCreateRequestDto("title", "desc", TaskPriority.MEDIUM, 1L, LocalDate.now(), LocalDate.now().plusDays(3),TaskStatus.TODO);
+        TaskCreateRequestDto dto = new TaskCreateRequestDto("title", "desc", TaskPriority.MEDIUM, 1L, LocalDate.now(),TaskStatus.TODO);
 
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
@@ -76,7 +74,7 @@ class TaskServiceTest {
         Page<Task> page = new PageImpl<>(List.of(task));
         when(taskRepository.findAllByIsDeletedIsFalse(any(PageRequest.class))).thenReturn(page);
 
-        Page<TaskResponseDto> result = taskService.searchTasks(PageRequest.of(0, 10), null);
+        Page<TaskResponseDto> result = taskService.searchTasks(PageRequest.of(0, 10), null, null, null);
 
         assertThat(result.getContent()).hasSize(1);
     }
@@ -84,18 +82,18 @@ class TaskServiceTest {
     @Test
     void 상태로_태스크_조회_테스트() {
         Page<Task> page = new PageImpl<>(List.of(task));
-        when(taskRepository.findAllByStatusAndIsDeletedFalse(eq(TaskStatus.TODO), any(PageRequest.class))).thenReturn(page);
+        when(taskRepository.findAllByStatusAndIsDeletedIsFalse(eq(TaskStatus.TODO), any(PageRequest.class))).thenReturn(page);
 
-        Page<TaskResponseDto> result = taskService.searchTasks(PageRequest.of(0, 10), TaskStatus.TODO);
+        Page<TaskResponseDto> result = taskService.searchTasks(PageRequest.of(0, 10), TaskStatus.TODO, null, null);
 
         assertThat(result.getContent()).hasSize(1);
     }
 
     @Test
     void 태스크_업데이트_테스트() {
-        TaskUpdateRequestDto dto = new TaskUpdateRequestDto(TaskPriority.HIGH, 1L, LocalDate.now().plusDays(5));
-        when(taskRepository.findById(1L)).thenReturn(Optional.of(task));
+        TaskUpdateRequestDto dto = new TaskUpdateRequestDto(null, null, null,TaskPriority.HIGH, 1L);
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(taskRepository.findById(1L)).thenReturn(Optional.of(task));
 
         TaskResponseDto result = taskService.updateTask(1L, dto);
 
@@ -139,7 +137,7 @@ class TaskServiceTest {
 
         assertThatThrownBy(() -> taskService.updateTaskStatus(dto, 1L))
                 .isInstanceOf(RuntimeException.class)
-                .hasMessageContaining("Task 상태는 이전 단계로 되돌릴 수 없습니다");
+                .hasMessageContaining("Task 상태 변경 흐름이 올바르지 않습니다.");
     }
 
     @Test
