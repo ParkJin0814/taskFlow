@@ -72,17 +72,17 @@ class TaskControllerTest {
 
         UserResponseDto userResponseDto = UserResponseDto.of(1L, "kmg02845", "kmg02845@gmail.com", "김민균");
 
-        TaskStatusUpdateRequestDto request = new TaskStatusUpdateRequestDto(TaskStatus.IN_PROGRESS);
+        TaskUpdateRequestDto request = new TaskUpdateRequestDto("제목","설명",LocalDate.now().plusDays(1),TaskPriority.LOW,2L);
         TaskResponseDto response = new TaskResponseDto(1L, "제목", "설명", TaskPriority.LOW, TaskStatus.IN_PROGRESS, 2L, userResponseDto, LocalDate.now().plusDays(1), LocalDateTime.now(),LocalDateTime.now());
 
-        Mockito.when(taskService.updateTaskStatus(any(TaskStatusUpdateRequestDto.class), any(Long.class))).thenReturn(response);
+        Mockito.when(taskService.updateTask(any(Long.class),any(TaskUpdateRequestDto.class))).thenReturn(response);
 
-        ResultActions result = mockMvc.perform(patch("/api/tasks/1")
+        ResultActions result = mockMvc.perform(put("/api/tasks/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)));
 
         result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.status").value("IN_PROGRESS"));
+                .andExpect(jsonPath("$.data.title").value("제목"));
     }
 
     @Test
@@ -96,7 +96,7 @@ class TaskControllerTest {
 
         Mockito.when(taskService.updateTaskStatus( any(TaskStatusUpdateRequestDto.class),any(Long.class))).thenReturn(response);
 
-        ResultActions result = mockMvc.perform(patch("/api/tasks/1")
+        ResultActions result = mockMvc.perform(patch("/api/tasks/1/status")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)));
 

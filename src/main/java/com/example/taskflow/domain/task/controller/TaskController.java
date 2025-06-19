@@ -32,7 +32,6 @@ import org.springframework.data.domain.Pageable;
 public class TaskController {
 
     private final TaskService taskService;
-    private final TaskRepository taskRepository;
 
     /**
      * 새로운 태스크를 생성합니다.
