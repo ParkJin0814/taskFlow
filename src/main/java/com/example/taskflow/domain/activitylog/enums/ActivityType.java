@@ -11,7 +11,7 @@ public enum ActivityType {
     TASK_STATUS_CHANGED("PATCH/api/tasks/{id}/status",1),
     COMMENT_CREATED("POST/api/tasks/{taskId}/comments",2),
     COMMENT_UPDATED("PUT/api/comments/{commentId}",2),
-    COMMENT_DELETED("DELETE/api/comments/{commentId}",2),
+    COMMENT_DELETED("DELETE/api/tasks/{taskId}/comments/{commentId}",2),
     USER_LOGGED_IN("POST/api/auth/login",3),
     USER_LOGGED_OUT("POST/logout",3);
 
